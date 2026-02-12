@@ -12,13 +12,13 @@ class Password:
             raise ValueError("El hash no puede estar vacio")
 
     @classmethod
-    def from_text(cls, password_txt: str, hasher: PasswordHasher) -> "Password":
+    def create_from_text(cls, password_txt: str, hasher: PasswordHasher) -> "Password":
         cls._validate_strength(password=password_txt)
         hashed = hasher.hash(password_txt)
         return cls(hashed)
 
     @classmethod
-    def from_hash(cls, hashed_password: str) -> "Password":
+    def create_from_hash(cls, hashed_password: str) -> "Password":
         return cls(hashed_password)
 
     def verify(self, password_txt: str, hasher: PasswordHasher) -> bool:

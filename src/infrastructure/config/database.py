@@ -12,7 +12,7 @@ class Database:
         return self._connection
 
     @staticmethod
-    def create_database(db_name: str) -> bool:
+    def create_database(db_name: str) -> bool | None:
         global sqlite_connection
         try:
             sqlite_connection = sqlite3.connect(db_name)
@@ -24,7 +24,7 @@ class Database:
             if sqlite_connection:
                 sqlite_connection.close()
 
-    def connect(self, db_name: str) -> Connection:
+    def connect(self, db_name: str):
         try:
             self._connection = sqlite3.connect(db_name)
         except Exception as e:

@@ -1,6 +1,6 @@
-from domain.service.password_hasher import PasswordHasher
-from domain.value_objects.email import Email
-from domain.value_objects.password import Password
+from src.domain.service.password_hasher import PasswordHasher
+from src.domain.value_objects.email import Email
+from src.domain.value_objects.password import Password
 from dataclasses import dataclass
 
 @dataclass()

@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from domain.service.password_hasher import PasswordHasher
+from src.domain.service.password_hasher import PasswordHasher
 
 
 @dataclass(frozen=True)

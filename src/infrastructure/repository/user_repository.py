@@ -15,11 +15,11 @@ class UserRepository:
         return result[0] > 0
 
     def create_user(self, user: User) -> bool:
-        try:
-            if self.email_exists(user.email):
-                #pasar el mensaje a la nueva excepción
-                raise UserAlreadyExistsError(f"El email {user.email.value} ya esta registrado")
+        if self.email_exists(user.email):
+            # pasar el mensaje a la nueva excepción
+            raise UserAlreadyExistsError(f"El email {user.email.value} ya esta registrado")
 
+        try:
             query = """
                     INSERT INTO usuarios (name, email, password, role)
                     VALUES (?, ?, ?, ?)
@@ -39,7 +39,7 @@ class UserRepository:
     def get_password_hash_by_email(self, email: Email):
         try:
             if not self.email_exists(email=email):
-                raise ValueError(f"El email {email} no esta registrado")
+                raise UserAlreadyExistsError(f"El email {user.email.value} ya esta registrado")
 
             query = "SELECT password FROM usuarios WHERE email = ?"
 

@@ -27,23 +27,37 @@ class CreateUserController:
             content={"message": "Usuario Registrado"}
         )
 
-        except ValueError:
+        except ValueError as e:
             # Captura de la validación de la contraseña
             return JSONResponse(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                content={"detail": "Credenciales Invalidas"}
+                content={
+                    "title": "Validation Error",
+                    "status": 400,
+                    "message": str(e)
+                }
             )
+
 
         except UserAlreadyExistsError as e:
             return JSONResponse(
                 status_code=status.HTTP_409_CONFLICT,
-                content={"detail": str(e)}  # Imprimirá: "El email X ya esta registrado"
+                content={
+                    "title": "User already exists error",
+                    "status": 409,
+                    "message": str(e)
+                }
+                # Imprimirá: "El email X ya esta registrado"
             )
         
         except Exception as e:
             return JSONResponse(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                content={"detail": str(e)}
+                content={
+                    "title": "Internal Server Error",
+                    "status": 500,
+                    "message": str(e)
+                }
             )
 
 

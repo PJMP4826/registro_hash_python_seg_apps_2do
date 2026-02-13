@@ -10,8 +10,9 @@ class User:
     name: str
     email: Email
     password: Password
-    password_hasher: PasswordHasher
     role: UserRole
+    password_hasher: PasswordHasher
+
 
     def verify_password(self, password: str):
         return self.password.verify(password, self.password_hasher)
@@ -29,7 +30,8 @@ class User:
             name=name,
             email=email,
             password=Password.create_from_text(password_txt, hasher),
-            role=role
+            role=role,
+            password_hasher=hasher
         )
 
     def to_dict(self) -> dict:

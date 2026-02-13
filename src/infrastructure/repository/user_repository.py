@@ -1,3 +1,4 @@
+from src.domain.exceptions.user_exceptions import UserAlreadyExistsError
 from src.domain.value_objects.email import Email
 from src.infrastructure.config.database import Database
 from src.domain.entities.user import User
@@ -16,7 +17,7 @@ class UserRepository:
     def create_user(self, user: User) -> bool:
         try:
             if self.email_exists(user.email):
-                raise ValueError(f"El email {user.email.value} ya esta registrado")
+                raise UserAlreadyExistsError()
 
             query = """
                     INSERT INTO usuarios (name, email, password, role)

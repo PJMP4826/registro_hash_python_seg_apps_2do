@@ -21,6 +21,11 @@ class CreateUserController:
             )
             self.use_case.create_client_user(user_dto)
 
+            return JSONResponse(
+            status_code=status.HTTP_201_CREATED,
+            content={"message": "Usuario Registrado"}
+        )
+
         except ValueError:
             # Captura de la validación de la contraseña
             return JSONResponse(

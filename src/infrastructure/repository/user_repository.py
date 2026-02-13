@@ -17,7 +17,8 @@ class UserRepository:
     def create_user(self, user: User) -> bool:
         try:
             if self.email_exists(user.email):
-                raise UserAlreadyExistsError()
+                #pasar el mensaje a la nueva excepción
+                raise UserAlreadyExistsError(f"El email {user.email.value} ya esta registrado")
 
             query = """
                     INSERT INTO usuarios (name, email, password, role)

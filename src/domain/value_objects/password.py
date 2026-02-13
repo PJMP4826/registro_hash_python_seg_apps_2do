@@ -30,8 +30,8 @@ class Password:
         if len(password) < 8:
             raise ValueError("La contraseña debe tener al menos 8 caracteres")
 
-        if len(password) > 128:
-            raise ValueError("La contraseña no puede exceder 128 caracteres")
+        if len(password) > 10:
+            raise ValueError("La contraseña no puede exceder los 10 caracteres")
 
         if not re.search(r'[A-Z]', password):
             raise ValueError("La contraseña debe contener al menos una mayúscula")

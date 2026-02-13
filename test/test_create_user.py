@@ -1,32 +1,25 @@
-from src.domain.entities.user import User
-from src.domain.value_objects.email import Email
-from src.domain.value_objects.password import Password
-from src.infrastructure.config.database import Database
+from src.application.dto.create_user_dto import CreateUserDTO
+from src.bootstrap.container import Container
 
-from src.infrastructure.security.bcrypt_password_hasher import BcryptPasswordHasher
 
-from src.infrastructure.repository.user_repository import UserRepository
-from src.domain.enums.user_role import UserRole
+# la data vendra de la request
+#por ejemplo:
+# input_dto = CreateUserDTO(
+#     name=request.name,
+#     email=request.email,
+#     password=request.password,
+# )
 
-hasher = BcryptPasswordHasher()
-
-user_password = Password.create_from_text("12222gdfdgdM@", hasher)
-
-user = User(
-    name='Fausto',
-    email=Email("fausto@gmail.com"),
-    password=user_password,
-    password_hasher=hasher,
-    role=UserRole.CLIENTE
+dto = CreateUserDTO(
+    name="Fausto_Test",
+    email="pato@outlook.com",
+    password="Super_p@ssword_22",
+    rol="admin"
 )
 
-db = Database()
-db.connect("../test_db.db")
+container = Container()
 
-repo = UserRepository(db=db)
-repo.create_user(user=user)
+use_case = container.create_user_use_case()
 
-print(user)
+use_case.admin(dto=dto)
 
-# hash de la password
-print(user.password.hashed_value)

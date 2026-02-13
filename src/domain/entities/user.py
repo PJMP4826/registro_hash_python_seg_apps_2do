@@ -4,6 +4,7 @@ from src.domain.value_objects.password import Password
 from src.domain.enums.user_role import UserRole
 from dataclasses import dataclass
 
+
 @dataclass()
 class User:
     name: str
@@ -14,6 +15,22 @@ class User:
 
     def verify_password(self, password: str):
         return self.password.verify(password, self.password_hasher)
+
+    @classmethod
+    def create(cls,
+               name: str,
+               email: Email,
+               password_txt: str,
+               role: UserRole,
+               hasher: PasswordHasher
+               ):
+
+        return cls(
+            name=name,
+            email=email,
+            password=Password.create_from_text(password_txt, hasher),
+            role=role
+        )
 
     def to_dict(self) -> dict:
         """convierte a diccionario para persistencia"""

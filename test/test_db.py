@@ -9,8 +9,8 @@ db.create_database('test_db.db')
 db.connect("test_db.db")
 
 # crear tablas
-db.execute_query("""
-    CREATE TABLE IF NOT EXISTS usuarios ( id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL, role TEXT DEFAULT 'cliente' )
+db.execute("""
+    CREATE TABLE IF NOT EXISTS usuarios ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL, role TEXT DEFAULT 'cliente' )
 """)
 
 # has tables?

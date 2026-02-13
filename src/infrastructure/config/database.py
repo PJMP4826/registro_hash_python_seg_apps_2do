@@ -40,18 +40,59 @@ class Database:
 
     def has_tables(self) -> bool:
         try:
-            tables = self.execute_query(
+            tables = self.execute_query_fetchall(
                 "SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;"
             )
             return len(tables) > 0
         except Exception as e:
             raise e
 
-    def execute_query(self, query) -> list[Any]:
+    def execute(self, query: str, params: Optional[tuple] = None) -> Any:
         try:
             cursor = self.connection.cursor()
+            cursor.execute(query, params or ())
+            return cursor
+        except Exception as e:
+            raise Exception(f"Error al ejecutar la consulta: {query}, Error: {str(e)}")
+
+    def execute_query_fetchall(self, query, params: Optional[tuple] = None) -> list[Any]:
+        try:
+            cursor = self.connection.cursor()
+
+            if params is not None:
+                cursor.execute(query, params)
+
             cursor.execute(query)
+
             self.connection.commit()
             return cursor.fetchall()
+        except Exception as e:
+            raise Exception(f"Error al ejecutar la consulta: {query}, Error: {str(e)}")
+
+    def execute_query_fetchmany(self, query, params: Optional[tuple] = None) -> list[Any]:
+        try:
+            cursor = self.connection.cursor()
+
+            if params is not None:
+                cursor.execute(query, params)
+
+            cursor.execute(query)
+
+            self.connection.commit()
+            return cursor.fetchmany()
+        except Exception as e:
+            raise Exception(f"Error al ejecutar la consulta: {query}, Error: {str(e)}")
+
+    def execute_query_fetchone(self, query, params: Optional[tuple] = None) -> list[Any]:
+        try:
+            cursor = self.connection.cursor()
+
+            if params is not None:
+                cursor.execute(query, params)
+
+            cursor.execute(query)
+
+            self.connection.commit()
+            return cursor.fetchone()
         except Exception as e:
             raise Exception(f"Error al ejecutar la consulta: {query}, Error: {str(e)}")

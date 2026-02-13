@@ -51,6 +51,7 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query, params or ())
+            self.connection.commit()
             return cursor
         except Exception as e:
             raise Exception(f"Error al ejecutar la consulta: {query}, Error: {str(e)}")
@@ -61,8 +62,8 @@ class Database:
 
             if params is not None:
                 cursor.execute(query, params)
-
-            cursor.execute(query)
+            else:
+                cursor.execute(query)
 
             self.connection.commit()
             return cursor.fetchall()
@@ -75,8 +76,8 @@ class Database:
 
             if params is not None:
                 cursor.execute(query, params)
-
-            cursor.execute(query)
+            else:
+                cursor.execute(query)
 
             self.connection.commit()
             return cursor.fetchmany()
@@ -89,8 +90,8 @@ class Database:
 
             if params is not None:
                 cursor.execute(query, params)
-
-            cursor.execute(query)
+            else:
+                cursor.execute(query)
 
             self.connection.commit()
             return cursor.fetchone()

@@ -28,5 +28,5 @@ container = Container()
 
 use_case = container.create_user_use_case()
 
-use_case.admin(dto=dto)
+use_case.create_admin_user(dto=dto)
 

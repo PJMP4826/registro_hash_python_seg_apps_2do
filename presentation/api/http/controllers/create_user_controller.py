@@ -19,7 +19,7 @@ class CreateUserController:
                 password=request_data.password,
                 rol=request_data.rol
             )
-            self.use_case.create_client_user(user_dto)
+            await self.use_case.create_client_user(user_dto)
 
             return JSONResponse(
             status_code=status.HTTP_201_CREATED,

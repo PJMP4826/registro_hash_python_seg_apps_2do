@@ -1,11 +1,11 @@
 from fastapi import APIRouter
+from presentation.api.http.schemas import CreateUserRequest
 from presentation.api.http.controllers.create_user_controller import CreateUserController
-from src.application.dto.create_user_dto import CreateUserDTO
 
 router = APIRouter()
 controller = CreateUserController()
 
 @router.post("/registro")
-async def register_user(user_dto: CreateUserDTO):
-    
-    return await controller.handle(user_dto)
+async def register_user(request: CreateUserRequest):
+    # Pasamos el "request" directamente. El controlador se encarga del resto.
+    return await controller.handle(request)

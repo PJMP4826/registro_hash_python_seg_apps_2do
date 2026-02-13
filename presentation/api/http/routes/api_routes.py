@@ -11,3 +11,4 @@ router = APIRouter()
 async def register_user(request: CreateUserRequest):
     controller = CreateUserController()
     return await controller.handle(request)
+

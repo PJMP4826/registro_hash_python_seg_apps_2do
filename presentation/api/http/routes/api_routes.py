@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from presentation.api.http.schemas import CreateUserRequest
+from presentation.api.http.controllers.requests.create_user_request import CreateUserRequest
 from presentation.api.http.controllers.create_user_controller import CreateUserController
 
 

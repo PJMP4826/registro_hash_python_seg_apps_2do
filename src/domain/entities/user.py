@@ -1,6 +1,7 @@
 from src.domain.service.password_hasher import PasswordHasher
 from src.domain.value_objects.email import Email
 from src.domain.value_objects.password import Password
+from src.domain.enums.user_role import UserRole
 from dataclasses import dataclass
 
 @dataclass()
@@ -9,6 +10,7 @@ class User:
     email: Email
     password: Password
     password_hasher: PasswordHasher
+    role: UserRole
 
     def verify_password(self, password: str):
         return self.password.verify(password, self.password_hasher)
@@ -26,5 +28,5 @@ class User:
         return cls(
             name=data['name'],
             email=Email(data['email']),
-            password=Password.from_hash(data['password']),
+            password=Password.create_from_hash(data['password']),
         )

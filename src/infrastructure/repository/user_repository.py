@@ -9,7 +9,7 @@ class UserRepository:
 
     def email_exists(self, email: Email) -> bool:
         query = "SELECT COUNT(*) as count FROM usuarios WHERE email = ?"
-        result = self.db.execute_query_fetchone(query, (str(email),))
+        result = self.db.execute_query_fetchone(query, (str(email.value),))
         print("Cantidad de emails: ", result)
         return result[0] > 0
 
@@ -33,3 +33,16 @@ class UserRepository:
             return True
         except Exception as e:
             raise Exception("Error al crear el usuario")
+
+    def get_password_hash_by_email(self, email: Email):
+        try:
+            if not self.email_exists(email=email):
+                raise ValueError(f"El email {email} no esta registrado")
+
+            query = "SELECT password FROM usuarios WHERE email = ?"
+
+            result = self.db.execute_query_fetchone(query, ((str(email.value)), ))
+
+            return result[0]
+        except Exception as e:
+            raise Exception("Error al obtener el hash de la contraseña: ", str(e))

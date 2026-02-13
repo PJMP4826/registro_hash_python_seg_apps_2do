@@ -11,7 +11,7 @@ class CreateUser:
         self.repo = repo
         self.hasher = hasher
 
-    def admin(self, dto: CreateUserDTO) -> bool:
+    def create_admin_user(self, dto: CreateUserDTO) -> bool:
         try:
             email = Email(dto.email)
 
@@ -27,7 +27,7 @@ class CreateUser:
         except Exception as e:
             raise Exception("Error al crear el usuario admin")
     
-    def client(self, dto: CreateUserDTO) -> bool:
+    def create_client_user(self, dto: CreateUserDTO) -> bool:
         try:
             email = Email(dto.email)
 

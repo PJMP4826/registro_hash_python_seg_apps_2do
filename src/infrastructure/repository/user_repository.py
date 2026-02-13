@@ -46,3 +46,18 @@ class UserRepository:
             return result[0]
         except Exception as e:
             raise Exception("Error al obtener el hash de la contraseña: ", str(e))
+
+    def update_password(self, password_hash: str, email: Email) -> bool:
+        try:
+            query = """
+                UPDATE usuarios SET password = ? WHERE email = ?
+            """
+
+            self.db.execute(query, (
+                password_hash,
+                email.value
+            ))
+
+            return True
+        except Exception as e:
+            raise Exception("Error al actualizar la contraseña")

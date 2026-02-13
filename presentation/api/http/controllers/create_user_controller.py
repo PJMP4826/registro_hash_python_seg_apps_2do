@@ -2,6 +2,7 @@ from src.bootstrap.container import Container
 from src.application.dto.create_user_dto import CreateUserDTO
 from fastapi import status
 from fastapi.responses import JSONResponse
+from src.domain.exceptions.user_exceptions import UserAlreadyExistsError
 
 
 class CreateUserController:
@@ -25,4 +26,13 @@ class CreateUserController:
             return JSONResponse(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 content={"detail": "Credenciales Invalidas"}
-        )
+            )
+
+        except UserAlreadyExistsError as e:
+            return JSONResponse(
+                status_code=status.HTTP_409_CONFLICT,
+                content={"detail": str(e)}  # Imprimirá: "El email X ya esta registrado"
+            )
+        
+
+

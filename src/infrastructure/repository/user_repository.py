@@ -34,7 +34,7 @@ class UserRepository:
 
             return True
         except Exception as e:
-            raise Exception("Error al crear el usuario")
+            raise Exception("Error al crear el usuario", str(e))
 
     def get_password_hash_by_email(self, email: Email):
         try:

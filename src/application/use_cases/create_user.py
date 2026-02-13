@@ -41,4 +41,4 @@ class CreateUser:
 
             return self.repo.create_user(user=user)
         except Exception as e:
-            raise Exception("Error al crear el usuario cliente")
+            raise Exception("Error al crear el usuario cliente: ", str(e))

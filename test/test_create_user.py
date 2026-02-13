@@ -10,6 +10,13 @@ from src.bootstrap.container import Container
 #     password=request.password,
 # )
 
+#Nota el Enumerable, solo permite crear 2 tipos de rol de usuario
+
+# UserRole.ADMIN - admin
+# UserRole.CLIENTE - cliente
+
+# si se agrega otro tipo marcara error
+
 dto = CreateUserDTO(
     name="Fausto_Test",
     email="pato@outlook.com",

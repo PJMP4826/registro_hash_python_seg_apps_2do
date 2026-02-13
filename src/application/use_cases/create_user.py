@@ -26,3 +26,19 @@ class CreateUser:
             return self.repo.create_user(user=user)
         except Exception as e:
             raise Exception("Error al crear el usuario admin")
+    
+    def client(self, dto: CreateUserDTO) -> bool:
+        try:
+            email = Email(dto.email)
+
+            user = User.create(
+                name=dto.name,
+                email=email,
+                password_txt=dto.password,
+                role=UserRole.CLIENTE,
+                hasher=self.hasher
+            )
+
+            return self.repo.create_user(user=user)
+        except Exception as e:
+            raise Exception("Error al crear el usuario cliente")

@@ -3,10 +3,10 @@ from src.infrastructure.config.database import Database
 db = Database()
 
 # crear db
-db.create_database('test_db.db')
+db.create_database('../test_db.db')
 
 # conectar a db
-db.connect("test_db.db")
+db.connect("../test_db.db")
 
 # crear tablas
 db.execute("""

@@ -1,7 +1,7 @@
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 
 @dataclass
-class CreateUserDTO:
+class CreateUserRequest:
     name: str
     email: str
     password: str

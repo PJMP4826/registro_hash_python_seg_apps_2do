@@ -3,6 +3,7 @@ from src.application.dto.create_user_dto import CreateUserDTO
 from fastapi import status
 from fastapi.responses import JSONResponse
 from src.domain.exceptions.user_exceptions import UserAlreadyExistsError
+from presentation.api.http.controllers.requests.create_user_request import CreateUserRequest
 
 
 class CreateUserController:
@@ -10,7 +11,7 @@ class CreateUserController:
         self.container = Container()
         self.use_case = self.container.create_user_use_case()
 
-    async def handle(self, request_data):
+    async def handle(self, request_data: CreateUserRequest):
         try:
         # Mapeo de los datos de la petición al DTO interno
             user_dto = CreateUserDTO(

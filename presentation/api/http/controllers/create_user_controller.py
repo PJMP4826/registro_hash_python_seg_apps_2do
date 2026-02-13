@@ -39,5 +39,10 @@ class CreateUserController:
                 content={"detail": str(e)}  # Imprimirá: "El email X ya esta registrado"
             )
         
+        except Exception as e:
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"detail": str(e)}
+            )
 
 

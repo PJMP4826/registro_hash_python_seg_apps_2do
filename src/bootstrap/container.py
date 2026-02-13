@@ -4,7 +4,7 @@ from .providers import (
     get_user_repository,
     get_password_hasher
 )
-from ..application.use_cases.change_password import ChangePassword
+from src.application.use_cases.change_password import ChangePassword
 
 
 class Container:

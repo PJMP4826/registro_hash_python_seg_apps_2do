@@ -34,20 +34,26 @@ class UserRepository:
 
             return True
         except Exception as e:
-            raise Exception("Error al crear el usuario", str(e))
+            raise Exception(f"Error al crear el usuario: {str(e)}")
 
     def get_password_hash_by_email(self, email: Email):
         try:
             if not self.email_exists(email=email):
-                raise UserAlreadyExistsError(f"El email {user.email.value} ya esta registrado")
+                raise ValueError(f"El email {email.value} no se encuentra registrado")
 
             query = "SELECT password FROM usuarios WHERE email = ?"
 
-            result = self.db.execute_query_fetchone(query, ((str(email.value)), ))
+            result = self.db.execute_query_fetchone(query, (str(email.value), ))
+            if result:
+                return result[0]
 
-            return result[0]
+            return None
+        
+        except ValueError as ve:
+            raise ve
         except Exception as e:
-            raise Exception("Error al obtener el hash de la contraseña: ", str(e))
+
+            raise Exception(f"Error al obtener el hash de la contraseña: {str(e)}")
 
     def update_password(self, password_hash: str, email: Email) -> bool:
         try:
@@ -62,4 +68,4 @@ class UserRepository:
 
             return True
         except Exception as e:
-            raise Exception("Error al actualizar la contraseña")
+            raise Exception(f"Error al actualizar la contraseña: {str(e)}")

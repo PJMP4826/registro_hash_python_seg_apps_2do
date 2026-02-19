@@ -5,6 +5,7 @@ from .providers import (
     get_password_hasher
 )
 from src.application.use_cases.change_password import ChangePassword
+from src.application.use_cases.change_rol import ChangeUserRol
 
 
 class Container:
@@ -21,6 +22,12 @@ class Container:
 
     def change_password_use_case(self) -> ChangePassword:
         return ChangePassword (
+            repo=self.user_repo,
+            hasher=self.hasher
+        )
+    
+    def change_rol_use_case(self) -> ChangeUserRol:
+        return ChangeUserRol(
             repo=self.user_repo,
             hasher=self.hasher
         )

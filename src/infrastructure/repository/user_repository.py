@@ -72,6 +72,9 @@ class UserRepository:
         
     def update_rol(self, rol_type: str, email: str) -> bool:
         try:
+            if not self.email_exists(email=email):
+                raise ValueError(f"El email {email} no se encuentra registrado")
+        
             query = """
                 UPDATE usuarios SET rol = ? WHERE email = ?
             """
@@ -82,5 +85,8 @@ class UserRepository:
             ))
 
             return True
+        except ValueError as ve:
+            raise ve
+        
         except Exception as e:
             raise Exception(f"Error al actualizar el rol")

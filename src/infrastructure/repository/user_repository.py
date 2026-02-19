@@ -69,3 +69,18 @@ class UserRepository:
             return True
         except Exception as e:
             raise Exception(f"Error al actualizar la contraseña: {str(e)}")
+        
+    def update_rol(self, rol_type: str, email: str) -> bool:
+        try:
+            query = """
+                UPDATE usuarios SET rol = ? WHERE email = ?
+            """
+
+            self.db.execute(query, (
+                rol_type,
+                email
+            ))
+
+            return True
+        except Exception as e:
+            raise Exception(f"Error al actualizar el rol")

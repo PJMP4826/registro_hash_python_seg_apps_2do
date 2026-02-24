@@ -6,6 +6,7 @@ from .providers import (
 )
 from src.application.use_cases.change_password import ChangePassword
 from src.application.use_cases.change_rol import ChangeUserRol
+from src.application.use_cases.authenticate_user import AuthenticateUser
 
 
 class Container:
@@ -28,6 +29,12 @@ class Container:
     
     def change_rol_use_case(self) -> ChangeUserRol:
         return ChangeUserRol(
+            repo=self.user_repo,
+            hasher=self.hasher
+        )
+    
+    def login_use_case(self) -> AuthenticateUser:
+        return AuthenticateUser(
             repo=self.user_repo,
             hasher=self.hasher
         )

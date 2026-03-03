@@ -1,0 +1,19 @@
+from pydantic_settings import BaseSettings
+from pydantic import Field, ConfigDict
+from pathlib import Path
+
+
+class Settings(BaseSettings):
+
+    model_config = ConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+    )  # type: ignore
+
+    # JWT Configuracion
+    jwt_secret_key: str = Field(..., description="JWT Secret Key")
+    jwt_refresh_secret_key: str = Field(..., description="JWT Refresh Secret Key")
+    jwt_algorithm: str = Field(..., description="JWT algorithm")
+
+
+
+settings = Settings()  # type: ignore

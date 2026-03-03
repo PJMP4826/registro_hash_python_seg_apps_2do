@@ -11,13 +11,15 @@ class UserRepository:
     def email_exists(self, email: str) -> bool:
         query = "SELECT COUNT(*) as count FROM usuarios WHERE email = ?"
         result = self.db.execute_query_fetchone(query, (str(email),))
-        print("Cantidad de emails: ", result)
+        # print("Cantidad de emails: ", result)
         return result[0] > 0
 
     def create_user(self, user: User) -> bool:
         if self.email_exists(user.email):
             # pasar el mensaje a la nueva excepción
-            raise UserAlreadyExistsError(f"El email {user.email.value} ya esta registrado")
+            raise UserAlreadyExistsError(
+                f"El email {user.email.value} ya esta registrado"
+            )
 
         try:
             query = """
@@ -25,23 +27,41 @@ class UserRepository:
                     VALUES (?, ?, ?, ?, ?)
                     """
 
-            self.db.execute(query, (
-                str(user.uuid),
-                str(user.name),
-                str(user.email.value),
-                user.password.hashed_value,
-                user.role.value
-            ))
+            self.db.execute(
+                query,
+                (
+                    str(user.uuid),
+                    str(user.name),
+                    str(user.email.value),
+                    user.password.hashed_value,
+                    user.role.value,
+                ),
+            )
 
             return True
         except Exception as e:
             raise Exception(f"Error al crear el usuario: {str(e)}")
-        
-    def get_user_by_email(self, emal: str) -> User:
+
+    def get_user_by_email(self, email: str) -> dict[str, str]:
+        if not self.email_exists(email=email):
+            raise ValueError(f"El email {email} no se encuentra registrado")
+
         try:
-            pass
+            query = "SELECT uuid, name, email, role FROM usuarios WHERE email = ?"
+
+            result = self.db.execute_query_fetchone(query, (str(email),))
+
+            if result:
+                return {
+                    "uuid": result[0],
+                    "name": result[1],
+                    "email": result[2],
+                    "role": result[3],
+                }
+
+            return None
         except Exception as e:
-            raise e
+            raise Exception(f"Error al consultar los datos del usuario: {str(e)}")
 
     def get_password_hash_by_email(self, email: str):
         try:
@@ -50,12 +70,12 @@ class UserRepository:
 
             query = "SELECT password FROM usuarios WHERE email = ?"
 
-            result = self.db.execute_query_fetchone(query, (str(email), ))
+            result = self.db.execute_query_fetchone(query, (str(email),))
             if result:
                 return result[0]
 
             return None
-        
+
         except ValueError as ve:
             raise ve
         except Exception as e:
@@ -68,32 +88,26 @@ class UserRepository:
                 UPDATE usuarios SET password = ? WHERE email = ?
             """
 
-            self.db.execute(query, (
-                password_hash,
-                email.value
-            ))
+            self.db.execute(query, (password_hash, email.value))
 
             return True
         except Exception as e:
             raise Exception(f"Error al actualizar la contraseña: {str(e)}")
-        
+
     def update_rol(self, rol_type: str, email: str) -> bool:
         try:
             if not self.email_exists(email=email):
                 raise ValueError(f"El email {email} no se encuentra registrado")
-        
+
             query = """
                 UPDATE usuarios SET role = ? WHERE email = ?
             """
 
-            self.db.execute(query, (
-                rol_type,
-                email
-            ))
+            self.db.execute(query, (rol_type, email))
 
             return True
         except ValueError as ve:
             raise ve
-        
+
         except Exception as e:
             raise Exception(f"Error al actualizar el rol")

@@ -2,7 +2,8 @@ from src.application.use_cases.create_user import CreateUser
 from .providers import (
     get_db_session,
     get_user_repository,
-    get_password_hasher
+    get_password_hasher,
+    get_jwt_token_service
 )
 from src.application.use_cases.change_password import ChangePassword
 from src.application.use_cases.change_rol import ChangeUserRol
@@ -14,6 +15,7 @@ class Container:
         self.db = get_db_session()
         self.user_repo = get_user_repository(self.db)
         self.hasher = get_password_hasher()
+        self.jwt_service = get_jwt_token_service()
 
     def create_user_use_case(self) -> CreateUser:
         return CreateUser(
@@ -36,5 +38,6 @@ class Container:
     def login_use_case(self) -> AuthenticateUser:
         return AuthenticateUser(
             repo=self.user_repo,
-            hasher=self.hasher
+            hasher=self.hasher,
+            token_service=self.jwt_service
         )

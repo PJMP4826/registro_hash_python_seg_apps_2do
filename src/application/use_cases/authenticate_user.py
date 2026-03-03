@@ -9,13 +9,15 @@ from src.domain.auth.verification_user import VerificationUser
 from src.domain.entities.token import TokenPayload
 from src.domain.value_objects.auth_token import AuthToken
 from src.domain.ports.jwt_service_port import TokenServicePort
+from src.infrastructure.config.settings import Settings
 
 
 class AuthenticateUser:
-    def __init__(self, repo: UserRepository, hasher: PasswordHasher, token_service: TokenServicePort):
-        self.repo = repo
-        self.hasher = hasher
+    def __init__(self, repo: UserRepository, hasher: PasswordHasher, token_service: TokenServicePort, settings: Settings):
+        self._repo = repo
+        self._hasher = hasher
         self._token_service = token_service
+        self._settings = settings
 
     def execute(self, dto: AuthenticateUserDTO) -> AuthToken:
         try:
@@ -28,7 +30,7 @@ class AuthenticateUser:
             # Reconstruccion del Objeto de Valor de la contraseña
             existing_password = Password.create_from_hash(existing_password_hash)
 
-            user = self.repo.get_user_by_email(email=email.value)
+            user = self._repo.get_user_by_email(email=email.value)
 
             self._verify_password(
                 existing_password=existing_password,
@@ -45,7 +47,7 @@ class AuthenticateUser:
     
     def _get_password_hash_from_db(self, email: str) -> str:
         try:
-            existing_password_hash = self.repo.get_password_hash_by_email(email)
+            existing_password_hash = self._repo.get_password_hash_by_email(email)
             if not existing_password_hash:
                 raise ValueError("El usuario no existe")
             
@@ -58,7 +60,7 @@ class AuthenticateUser:
         try:
             verification_user = VerificationUser(
                 password=existing_password,
-                password_hasher=self.hasher
+                password_hasher=self._hasher
             )   
             if not verification_user.verify_password(password_txt=password_txt):
                 raise ValueError("Contraseña actual inválida")
@@ -68,7 +70,7 @@ class AuthenticateUser:
             raise ve
         
     def _generate_jwt_token(self, user_data: dict[str, str]) -> AuthToken:
-            expiration_time = datetime.now() + timedelta(minutes=15)
+            expiration_time = datetime.now() + timedelta(minutes=self._settings.jwt_expires_in)
 
 
             payload = TokenPayload(

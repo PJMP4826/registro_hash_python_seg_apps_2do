@@ -3,7 +3,8 @@ from .providers import (
     get_db_session,
     get_user_repository,
     get_password_hasher,
-    get_jwt_token_service
+    get_jwt_token_service,
+    get_settings
 )
 from src.application.use_cases.change_password import ChangePassword
 from src.application.use_cases.change_rol import ChangeUserRol
@@ -41,7 +42,8 @@ class Container:
         return AuthenticateUser(
             repo=self.user_repo,
             hasher=self.hasher,
-            token_service=self.jwt_service
+            token_service=self.jwt_service,
+            settings=get_settings()
         )
     
     def validate_token_use_case(self) -> ValidateTokenUseCase:

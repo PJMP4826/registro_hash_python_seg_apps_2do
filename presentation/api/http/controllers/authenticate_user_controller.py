@@ -17,12 +17,17 @@ class AuthenticateUserController:
                 password_txt=request_data.password_txt,
             )
             
-            self.use_case.execute(dto)
+            token = self.use_case.execute(dto)
 
             # Respuesta exitosa
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
-                content={"message": "Credenciales Correctas :)"}
+                content={
+                    "status": 200,
+                    "message": "Login exitoso",
+                    "token": token.access_token,
+                    "refresh_token": token.refresh_token
+                }
             )
 
         except ValueError as e:

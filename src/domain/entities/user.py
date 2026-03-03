@@ -1,3 +1,4 @@
+import uuid
 from src.domain.service.password_hasher import PasswordHasher
 from src.domain.value_objects.email import Email
 from src.domain.value_objects.password import Password
@@ -7,6 +8,7 @@ from dataclasses import dataclass
 
 @dataclass()
 class User:
+    uuid: str
     name: str
     email: Email
     password: Password
@@ -27,6 +29,7 @@ class User:
                ):
 
         return cls(
+            uuid=str(uuid.uuid4()),
             name=name,
             email=email,
             password=Password.create_from_text(password_txt, hasher),

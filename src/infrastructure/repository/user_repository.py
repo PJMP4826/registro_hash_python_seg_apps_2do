@@ -21,11 +21,12 @@ class UserRepository:
 
         try:
             query = """
-                    INSERT INTO usuarios (name, email, password, role)
-                    VALUES (?, ?, ?, ?)
+                    INSERT INTO usuarios (uuid, name, email, password, role)
+                    VALUES (?, ?, ?, ?, ?)
                     """
 
             self.db.execute(query, (
+                str(user.uuid),
                 str(user.name),
                 str(user.email.value),
                 user.password.hashed_value,
@@ -35,6 +36,12 @@ class UserRepository:
             return True
         except Exception as e:
             raise Exception(f"Error al crear el usuario: {str(e)}")
+        
+    def get_user_by_email(self, emal: str) -> User:
+        try:
+            pass
+        except Exception as e:
+            raise e
 
     def get_password_hash_by_email(self, email: str):
         try:

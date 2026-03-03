@@ -8,6 +8,8 @@ from .providers import (
 from src.application.use_cases.change_password import ChangePassword
 from src.application.use_cases.change_rol import ChangeUserRol
 from src.application.use_cases.authenticate_user import AuthenticateUser
+from src.application.use_cases.validate_token import ValidateTokenUseCase
+from presentation.middleware.auth_middleware import JWTMiddleware
 
 
 class Container:
@@ -41,3 +43,11 @@ class Container:
             hasher=self.hasher,
             token_service=self.jwt_service
         )
+    
+    def validate_token_use_case(self) -> ValidateTokenUseCase:
+        return ValidateTokenUseCase(
+            token_service=self.jwt_service
+        )
+    
+    def get_json_middleware(self) -> JWTMiddleware:
+        return JWTMiddleware(validate_token_use_case=self.validate_token_use_case())

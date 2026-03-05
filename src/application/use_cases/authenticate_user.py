@@ -70,7 +70,7 @@ class AuthenticateUser:
             raise ve
         
     def _generate_jwt_token(self, user_data: dict[str, str]) -> AuthToken:
-            expiration_time = datetime.now() + timedelta(minutes=self._settings.jwt_expires_in)
+            expiration_time = datetime.now() + timedelta(minutes=self._settings.jwt_expires_in_minutes)
 
 
             payload = TokenPayload(

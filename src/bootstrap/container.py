@@ -4,6 +4,8 @@ from .providers import (
     get_user_repository,
     get_password_hasher,
     get_jwt_token_service,
+    get_departamento_repository,
+    get_inquilino_repository,
     settings
 )
 from src.application.use_cases.change_password import ChangePassword
@@ -17,6 +19,8 @@ class Container:
     def __init__(self):
         self.db = get_db_session()
         self.user_repo = get_user_repository(self.db)
+        self.departamento_repository = get_departamento_repository(self.db)
+        self.inquilino_repository = get_inquilino_repository(self.db)
         self.hasher = get_password_hasher()
         self.jwt_service = get_jwt_token_service()
 
@@ -53,3 +57,5 @@ class Container:
     
     def get_json_middleware(self) -> JWTMiddleware:
         return JWTMiddleware(validate_token_use_case=self.validate_token_use_case())
+    
+container = Container()

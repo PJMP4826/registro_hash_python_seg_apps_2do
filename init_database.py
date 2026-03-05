@@ -56,7 +56,8 @@ def create_tables_schema(db_name: str):
             CREATE TABLE cuotas (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 inquilino_id INTEGER NOT NULL,
-                monto NUMERIC NOT NULL,
+                monto_esperado NUMERIC NOT NULL,
+                monto_pagado NUMERIC NOT NULL,
                 fecha TEXT NOT NULL,
                 fecha_vencimiento TEXT NOT NULL,
                 estado TEXT NOT NULL CHECK (

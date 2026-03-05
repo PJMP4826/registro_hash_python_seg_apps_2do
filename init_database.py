@@ -1,8 +1,7 @@
 from src.bootstrap.providers import BASE_DIR
-from src.infrastructure.config.settings import Settings
+from src.infrastructure.config.settings import settings
 from src.infrastructure.config.database import Database
 
-settings = Settings()
 db = Database()
 
 

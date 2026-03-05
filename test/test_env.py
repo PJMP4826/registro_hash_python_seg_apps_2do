@@ -1,6 +1,5 @@
-from src.infrastructure.config.settings import Settings
+from src.infrastructure.config.settings import settings
 
-settings = Settings()
 
 print(settings.jwt_secret_key)
 print(settings.jwt_refresh_secret_key)

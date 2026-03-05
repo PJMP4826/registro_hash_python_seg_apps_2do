@@ -13,13 +13,15 @@ class Database:
 
     @staticmethod
     def create_database(db_name: str) -> bool | None:
-        global sqlite_connection
+        sqlite_connection = None
+        
         try:
             sqlite_connection = sqlite3.connect(db_name)
 
             return True
         except sqlite3.Error as error:
             print("Error occurred:", error)
+            return False
         finally:
             if sqlite_connection:
                 sqlite_connection.close()

@@ -29,6 +29,10 @@ class User:
     @property
     def uuid(self) -> str:
         return self._uuid
+    
+    @property
+    def name(self) -> str:
+        return self._name
 
     @property
     def email(self) -> Email:

@@ -5,9 +5,9 @@ from decimal import Decimal
 class Departamento:
     def __init__(
         self,
-        id: str,
+        id: int,
         piso: int,
-        num_departamento: str,
+        num_departamento: int,
         monto_renta: Decimal,
         status: DepartamentoStatus = DepartamentoStatus.DISPONIBLE,
     ):
@@ -18,12 +18,24 @@ class Departamento:
         self._status = status
 
     @property
-    def id(self) -> str:
+    def id(self) -> int:
         return self._id
 
     @property
     def status(self) -> DepartamentoStatus:
         return self._status
+    
+    @property
+    def piso(self) -> int:
+        return self._piso
+    
+    @property
+    def num_departamento(self) -> int:
+        return self._num_departamento
+    
+    @property
+    def monto_renta(self) -> Decimal:
+        return self._monto_renta
 
     def mark_as_occupied(self) -> None:
         if self._status == DepartamentoStatus.OCUPADO:

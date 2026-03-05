@@ -22,6 +22,34 @@ class Cuota:
         self._estado = estado
         self._monto_pagado = monto_pagado
 
+    @property
+    def id(self) -> str:
+        return self._id
+
+    @property
+    def inquilino_id(self) -> str:
+        return self._inquilino_id
+
+    @property
+    def monto(self) -> Decimal:
+        return self._monto
+
+    @property
+    def fecha(self) -> datetime:
+        return self._fecha
+
+    @property
+    def fecha_vencimiento(self) -> datetime:
+        return self._fecha_vencimiento
+
+    @property
+    def estado(self) -> CuotaStatus:
+        return self._estado
+
+    @property
+    def monto_pagado(self) -> Decimal:
+        return self._monto_pagado
+
     def apply_payment(self, amount: Decimal) -> None:
 
         if amount <= Decimal("0"):

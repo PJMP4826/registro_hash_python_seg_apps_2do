@@ -5,11 +5,11 @@ from src.infrastructure.repository.user_repository import UserRepository
 from src.infrastructure.security.bcrypt_password_hasher import BcryptPasswordHasher
 from src.infrastructure.security.jwt_service import JWTService
 
-BASE_DIR = Path(__file__).resolve().parents[2]
-DB_PATH = BASE_DIR / "test_db_2.db"
-
 def get_settings() -> Settings:
     return Settings()
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+DB_PATH = BASE_DIR / get_settings().database_name
 
 def get_db_session() -> Database:
     db = Database()

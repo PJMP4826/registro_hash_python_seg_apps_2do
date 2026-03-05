@@ -11,8 +11,10 @@ class DepartamentoRepository:
 
     def create(self, departamento: Departamento) -> int | None:
         if self.departamento_exist(departamento.num_departamento):
-            raise ValueError(f"El departamento numero {departamento.num_departamento} ya existe") 
-        
+            raise ValueError(
+                f"El departamento numero {departamento.num_departamento} ya existe"
+            )
+
         query = """
             INSERT INTO departamentos (piso, num_departamento, monto_renta, status)
             VALUES (?, ?, ?, ?)
@@ -46,11 +48,31 @@ class DepartamentoRepository:
             monto_renta=Decimal(str(row[3])),
             status=DepartamentoStatus(row[4]),
         )
-    
+
+    def get_by_numero_departamento(
+        self, num_departamento: int
+    ) -> Optional[Departamento]:
+        query = """
+            SELECT id, piso, num_departamento, monto_renta, status
+            FROM departamentos
+            WHERE num_departamento = ?
+        """
+        row = self._db.execute_query_fetchone(query, (num_departamento,))
+        if not row:
+            return None
+
+        return Departamento(
+            id=int(row[0]),
+            piso=int(row[1]),
+            num_departamento=int(row[2]),
+            monto_renta=Decimal(str(row[3])),
+            status=DepartamentoStatus(row[4]),
+        )
+
     def departamento_exist(self, num_departamento: int) -> bool:
         query = "SELECT COUNT(*) as count FROM departamentos WHERE num_departamento = ?"
         result = self._db.execute_query_fetchone(query, (str(num_departamento),))
-        return result[0] > 0 # type: ignore
+        return result[0] > 0  # type: ignore
 
     def list_available(self) -> list[Departamento]:
         query = """

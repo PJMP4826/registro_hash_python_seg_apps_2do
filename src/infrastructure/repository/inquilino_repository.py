@@ -2,16 +2,17 @@ from typing import Optional
 from src.domain.entities.inquilino import Inquilino
 from src.infrastructure.config.database import Database
 
+
 class InquilinoRepository:
     def __init__(self, db: Database):
         self._db = db
 
     def create(self, inquilino: Inquilino) -> int | None:
         query = """
-            INSERT INTO inquilinos (nombre_completo, telefono, estatus, departamento_id)
-            VALUES (?, ?, ?, ?)
-        """
-        cursor = self._db.execute( 
+                INSERT INTO inquilinos (nombre_completo, telefono, estatus, departamento_id)
+                VALUES (?, ?, ?, ?)
+            """
+        cursor = self._db.execute(
             query,
             (
                 inquilino.nombre_completo,
@@ -20,6 +21,10 @@ class InquilinoRepository:
                 inquilino.departamento_id,
             ),
         )
+
+        if cursor.lastrowid is None:
+            raise Exception("Error al crear inquilino")
+
         return cursor.lastrowid
 
     def get_by_id(self, id_: int) -> Optional[Inquilino]:
@@ -28,7 +33,7 @@ class InquilinoRepository:
             FROM inquilinos
             WHERE id = ?
         """
-        row = self._db.execute_query_fetchone(query, (id_,)) 
+        row = self._db.execute_query_fetchone(query, (id_,))
         if not row:
             return None
 
@@ -46,7 +51,7 @@ class InquilinoRepository:
             FROM inquilinos
             WHERE departamento_id = ?
         """
-        row = self._db.execute_query_fetchone(query, (departamento_id,)) 
+        row = self._db.execute_query_fetchone(query, (departamento_id,))
         if not row:
             return None
         return Inquilino(
@@ -63,7 +68,7 @@ class InquilinoRepository:
             FROM inquilinos
             WHERE estatus = 1
         """
-        rows = self._db.execute_query_fetchall(query) 
+        rows = self._db.execute_query_fetchall(query)
         return [
             Inquilino(
                 id=r[0],

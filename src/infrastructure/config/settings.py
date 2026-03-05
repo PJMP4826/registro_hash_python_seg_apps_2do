@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     jwt_secret_key: str = Field(..., description="JWT Secret Key")
     jwt_refresh_secret_key: str = Field(..., description="JWT Refresh Secret Key")
     jwt_algorithm: str = Field(..., description="JWT algorithm")
-    jwt_expires_in: int = Field(..., description="Token expiration in minutes")
+    jwt_expires_in_minutes: int = Field(..., description="Token expiration in minutes")
 
 
 

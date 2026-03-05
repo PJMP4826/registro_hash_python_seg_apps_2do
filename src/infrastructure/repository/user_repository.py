@@ -42,22 +42,23 @@ class UserRepository:
         except Exception as e:
             raise Exception(f"Error al crear el usuario: {str(e)}")
 
-    def get_user_by_email(self, email: str) -> dict[str, str]:
+    def get_user_by_email(self, email: str) -> User | None:
         if not self.email_exists(email=email):
             raise ValueError(f"El email {email} no se encuentra registrado")
 
         try:
-            query = "SELECT uuid, name, email, role FROM usuarios WHERE email = ?"
+            query = "SELECT uuid, name, email, password, role FROM usuarios WHERE email = ?"
 
             result = self.db.execute_query_fetchone(query, (str(email),))
 
             if result:
-                return {
+                return User.from_dict({
                     "uuid": result[0],
                     "name": result[1],
                     "email": result[2],
-                    "role": result[3],
-                }
+                    "password": result[3],
+                    "role": result[4],
+                })
 
             return None
         except Exception as e:

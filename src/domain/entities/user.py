@@ -13,20 +13,32 @@ class User:
     email: Email
     password: Password
     role: UserRole
-    password_hasher: PasswordHasher
 
+    # en este puento User ya tiene carga el hash de la password desde DB en password.hashed_value
+    def verify_password(self, password_txt: str, password_hasher: PasswordHasher):
+        return self.password.verify(password_txt, password_hasher)
 
-    def verify_password(self, password: str):
-        return self.password.verify(password, self.password_hasher)
+    def change_password(
+        self, old_password_txt: str, new_password: str, password_hasher: PasswordHasher
+    ) -> Password:
+        if not self.password.verify(
+            password_txt=old_password_txt, hasher=password_hasher
+        ):
+            raise ValueError("Contraseña actual inválida")
+
+        self.password = Password.create_from_text(
+            password_txt=new_password, hasher=password_hasher
+        )
 
     @classmethod
-    def create(cls,
-               name: str,
-               email: Email,
-               password_txt: str,
-               role: UserRole,
-               hasher: PasswordHasher
-               ):
+    def create(
+        cls,
+        name: str,
+        email: Email,
+        password_txt: str,
+        role: UserRole,
+        hasher: PasswordHasher,
+    ):
 
         return cls(
             uuid=str(uuid.uuid4()),
@@ -34,21 +46,24 @@ class User:
             email=email,
             password=Password.create_from_text(password_txt, hasher),
             role=role,
-            password_hasher=hasher
         )
 
     def to_dict(self) -> dict:
         """convierte a diccionario para persistencia"""
         return {
-            'name': str(self.name),
-            'email': str(self.email),
-            'password': self.password.hashed_value
+            "uuid": self.uuid,
+            "name": str(self.name),
+            "email": str(self.email),
+            "password": self.password.hashed_value,
+            "role": self.role.value,
         }
 
     @classmethod
-    def from_dict(cls, data: dict, password_hasher: PasswordHasher) -> 'User':
+    def from_dict(cls, data: dict) -> "User":
         return cls(
-            name=data['name'],
-            email=Email(data['email']),
-            password=Password.create_from_hash(data['password']),
+            uuid=data["uuid"],
+            name=data["name"],
+            email=Email(data["email"]),
+            password=Password.create_from_hash(data["password"]),
+            role=UserRole(data["role"]),
         )

@@ -1,4 +1,5 @@
 import uuid
+from typing import Any
 from src.domain.service.password_hasher import PasswordHasher
 from src.domain.value_objects.email import Email
 from src.domain.value_objects.password import Password
@@ -13,12 +14,16 @@ class User:
         email: Email,
         password: Password,
         role: UserRole,
+        inquilino_id: str | None = None
     ):
         self._uuid = uuid
         self._name = name
         self._email = email
         self._password = password
         self._role = role
+        self._inquilino_id = inquilino_id
+
+        self._validate_integrity()
 
     # exponer propiedades read-only en python
     @property
@@ -54,6 +59,22 @@ class User:
             password_txt=new_password_txt, hasher=password_hasher
         )
 
+    def is_admin(self) -> bool:
+        return self.role.value == "admin"
+    
+    def is_client(self) -> bool:
+        return self.role.value == "cliente"
+    
+    def is_linked_to_inquilino(self) -> bool:
+        return self._inquilino_id is not None
+    
+    def _validate_integrity(self):
+        if self._role == UserRole.CLIENTE and self._inquilino_id is None:
+            raise ValueError("Client user must be linked to a tenant")
+
+        if self._role == UserRole.ADMIN and self._inquilino_id is not None:
+            raise ValueError("Admin cannot have tenant")
+
     @classmethod
     def create(
         cls,
@@ -69,21 +90,21 @@ class User:
             name=name,
             email=email,
             password=Password.create_from_text(password_txt, hasher),
-            role=role,
+            role=role
         )
 
-    def to_dict(self) -> dict:
-
+    def to_dict(self) -> dict[str, Any]:
         return {
             "uuid": self._uuid,
             "name": self._name,
             "email": str(self._email),
             "password": self._password.hashed_value,
             "role": self._role.value,
+            "inquilino_id": str(self._inquilino_id) if self._inquilino_id else None
         }
 
     @classmethod
-    def from_dict(cls, data: dict):
+    def from_dict(cls, data: dict[str, Any]):
 
         return cls(
             uuid=data["uuid"],
@@ -91,4 +112,5 @@ class User:
             email=Email(data["email"]),
             password=Password.create_from_hash(data["password"]),
             role=UserRole(data["role"]),
+            inquilino_id=(data["inquilino_id"]) if data["inquilino_id"] else None
         )

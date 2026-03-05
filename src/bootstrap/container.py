@@ -13,6 +13,7 @@ from src.application.use_cases.change_rol import ChangeUserRol
 from src.application.use_cases.authenticate_user import AuthenticateUser
 from src.application.use_cases.validate_token import ValidateTokenUseCase
 from presentation.middleware.auth_middleware import JWTMiddleware
+from src.application.use_cases.crear_inquilino_and_assign_departamento import CreateInquilinoAndAssignDepartamento
 
 
 class Container:
@@ -53,6 +54,12 @@ class Container:
     def validate_token_use_case(self) -> ValidateTokenUseCase:
         return ValidateTokenUseCase(
             token_service=self.jwt_service
+        )
+    
+    def crear_inquilino_and_assign_departamento_use_case(self) -> CreateInquilinoAndAssignDepartamento:
+        return CreateInquilinoAndAssignDepartamento(
+            departamento_repo=self.departamento_repository,
+            inquilino_repo=self.inquilino_repository
         )
     
     def get_json_middleware(self) -> JWTMiddleware:

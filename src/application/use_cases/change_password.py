@@ -19,7 +19,7 @@ class ChangePassword:
 
             # Creacion de la nueva contraseña
             user.change_password(
-                new_password=dto.new_password_txt,
+                new_password_txt=dto.new_password_txt,
                 old_password_txt=dto.old_password_txt,
                 password_hasher=self._hasher,
             )

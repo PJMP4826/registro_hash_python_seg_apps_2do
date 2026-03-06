@@ -12,10 +12,10 @@ class UserRepository:
         query = "SELECT COUNT(*) as count FROM usuarios WHERE email = ?"
         result = self.db.execute_query_fetchone(query, (str(email),))
         # print("Cantidad de emails: ", result)
-        return result[0] > 0
+        return result[0] > 0 # type: ignore
 
     def create_user(self, user: User) -> bool:
-        if self.email_exists(user.email):
+        if self.email_exists(user.email.value):
             # pasar el mensaje a la nueva excepción
             raise UserAlreadyExistsError(
                 f"El email {user.email.value} ya esta registrado"
@@ -23,8 +23,8 @@ class UserRepository:
 
         try:
             query = """
-                    INSERT INTO usuarios (uuid, name, email, password, role)
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO usuarios (uuid, name, email, password, role, inquilino_id)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     """
 
             self.db.execute(
@@ -35,6 +35,7 @@ class UserRepository:
                     str(user.email.value),
                     user.password.hashed_value,
                     user.role.value,
+                    user.inquilino_id # puede ser null cuando se crea un usuario admin (el admin no es inquilino)
                 ),
             )
 
@@ -111,4 +112,4 @@ class UserRepository:
             raise ve
 
         except Exception as e:
-            raise Exception(f"Error al actualizar el rol")
+            raise Exception(f"Error al actualizar el rol: {str(e)}")

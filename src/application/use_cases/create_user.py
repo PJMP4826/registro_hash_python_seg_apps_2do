@@ -1,5 +1,6 @@
 from src.infrastructure.repository.user_repository import UserRepository
 from src.application.dto.create_user_dto import CreateUserDTO
+from src.application.commands.create_user_admin_command import CreateUserAdminCommand
 from src.domain.service.password_hasher import PasswordHasher
 from src.domain.entities.user import User
 from src.domain.value_objects.email import Email
@@ -11,20 +12,14 @@ class CreateUser:
         self.repo = repo
         self.hasher = hasher
 
-    def create_admin_user(self, dto: CreateUserDTO) -> bool:
-        try:
-            user_role = UserRole(dto.rol)
-        except ValueError:
-            valid_roles = ", ".join([role.value for role in UserRole])
-            raise ValueError(f"El rol {dto.rol} no es válido. Roles permitidos: {str(valid_roles)}")
-
-        email = Email(dto.email)
+    def create_admin_user(self, command: CreateUserAdminCommand) -> bool:
+        email = Email(command.email)
 
         user = User.create(
-            name=dto.name,
+            name=command.name,
             email=email,
-            password_txt=dto.password,
-            role=user_role,
+            password_txt=command.password,
+            role=UserRole.ADMIN,
             hasher=self.hasher
         )
 

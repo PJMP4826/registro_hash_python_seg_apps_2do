@@ -1,10 +1,11 @@
 import bcrypt
 from src.domain.service.password_hasher import PasswordHasher
+from src.infrastructure.config.settings import Settings
 
 
 class BcryptPasswordHasher(PasswordHasher):
-    def __init__(self, rounds: int = 12):
-        self.rounds = rounds
+    def __init__(self, settings: Settings):
+        self.rounds = settings.bcrypt_hash_salt
 
     def hash(self, plain_password: str) -> str:
         salt = bcrypt.gensalt(rounds=self.rounds)

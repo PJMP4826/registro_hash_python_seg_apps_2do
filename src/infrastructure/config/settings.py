@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     initial_admin_password: str = Field(..., description="Admin Password")
 
 
+    # Bcryp Configuration
+    bcrypt_hash_salt: int = Field(..., description="Salt para hash usando bcrypt")
+
     # JWT Configuracion
     jwt_secret_key: str = Field(..., description="JWT Secret Key")
     jwt_refresh_secret_key: str = Field(..., description="JWT Refresh Secret Key")

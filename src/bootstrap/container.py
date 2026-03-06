@@ -14,6 +14,7 @@ from src.application.use_cases.authenticate_user import AuthenticateUser
 from src.application.use_cases.validate_token import ValidateTokenUseCase
 from presentation.middleware.auth_middleware import JWTMiddleware
 from src.application.use_cases.crear_inquilino_and_assign_departamento import CreateInquilinoAndAssignDepartamento
+from src.application.use_cases.create_inquilino_with_user import CreateInquilinoWithUser
 
 
 class Container:
@@ -60,6 +61,12 @@ class Container:
         return CreateInquilinoAndAssignDepartamento(
             departamento_repo=self.departamento_repository,
             inquilino_repo=self.inquilino_repository
+        )
+    
+    def create_inquilino_with_user_use_case(self) -> CreateInquilinoWithUser:
+        return CreateInquilinoWithUser(
+            create_user_use_case=self.create_user_use_case(),
+            create_inquilino_assign_departamento_use_case=self.crear_inquilino_and_assign_departamento_use_case()
         )
     
     def get_json_middleware(self) -> JWTMiddleware:

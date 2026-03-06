@@ -14,7 +14,7 @@ class User:
         email: Email,
         password: Password,
         role: UserRole,
-        inquilino_id: str | None = None
+        inquilino_id: int | None = None
     ):
         self._uuid = uuid
         self._name = name
@@ -45,6 +45,10 @@ class User:
     @property
     def password(self) -> Password:
         return self._password
+    
+    @property
+    def inquilino_id(self) -> int | None:
+        return self._inquilino_id
 
     def verify_password(self, password_txt: str, password_hasher: PasswordHasher) -> bool:
         return self._password.verify(password_txt, password_hasher)
@@ -74,10 +78,10 @@ class User:
     
     def _validate_integrity(self):
         if self._role == UserRole.CLIENTE and self._inquilino_id is None:
-            raise ValueError("Client user must be linked to a tenant")
+            raise ValueError("Un cliente debe ser inquilino de un departamento")
 
         if self._role == UserRole.ADMIN and self._inquilino_id is not None:
-            raise ValueError("Admin cannot have tenant")
+            raise ValueError("El Administrador no puede tomar un departamento")
 
     @classmethod
     def create(
@@ -87,6 +91,7 @@ class User:
         password_txt: str,
         role: UserRole,
         hasher: PasswordHasher,
+        inquilino_id: int | None = None
     ):
 
         return cls(
@@ -94,7 +99,8 @@ class User:
             name=name,
             email=email,
             password=Password.create_from_text(password_txt, hasher),
-            role=role
+            role=role,
+            inquilino_id=inquilino_id
         )
 
     def to_dict(self) -> dict[str, Any]:

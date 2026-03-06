@@ -20,7 +20,7 @@ from src.bootstrap.container import Container
 dto = CreateUserDTO(
     name="Fausto_Test",
     email="pato@outlook.com",
-    password="Super_p@ssword_22",
+    password="2g@hamJh",
     rol="admin"
 )
 

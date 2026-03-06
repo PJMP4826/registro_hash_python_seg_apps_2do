@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends
-from presentation.api.http.routes import api_routes 
-from presentation.api.http.routes import products_routes
+from presentation.api.http.routes import general_routes
+from presentation.api.http.routes import client_routes 
+from presentation.api.http.routes import admin_routes
 from src.bootstrap.container import Container
 
 
@@ -17,8 +18,9 @@ container = Container()
 # middlewares
 auth_middleware = container.get_json_middleware()
 
-app.include_router(api_routes.router, prefix="/api/v1", tags=["Usuarios"])
-app.include_router(products_routes.router, prefix="/api/v1", tags=["Productos"], dependencies=[Depends(auth_middleware.require_role("admin"))])
+app.include_router(general_routes.router, prefix="/api/v1", tags=["Usuarios"])
+app.include_router(client_routes.router, prefix="/api/v1", tags=["Clientes"], dependencies=[Depends(auth_middleware.require_role("cliente"))])
+app.include_router(admin_routes.router, prefix="/api/v1", tags=["Admin"], dependencies=[Depends(auth_middleware.require_role("admin"))])
 
 @app.get("/")
 def read_root():

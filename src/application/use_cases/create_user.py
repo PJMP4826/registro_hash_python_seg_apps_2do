@@ -30,7 +30,7 @@ class CreateUser:
 
         return self.repo.create_user(user=user)
 
-    def create_client_user(self, dto: CreateUserDTO) -> bool:
+    def create_client_user(self, dto: CreateUserDTO, inquilino_id: int | None = None) -> bool:
         try:
             user_role = UserRole(dto.rol)
         except ValueError:
@@ -44,7 +44,8 @@ class CreateUser:
             email=email,
             password_txt=dto.password,
             role=user_role,
-            hasher=self.hasher
+            hasher=self.hasher,
+            inquilino_id=inquilino_id
         )
 
         return self.repo.create_user(user=user)

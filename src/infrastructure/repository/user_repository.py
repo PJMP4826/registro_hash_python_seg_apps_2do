@@ -48,7 +48,7 @@ class UserRepository:
             raise ValueError(f"El email {email} no se encuentra registrado")
 
         try:
-            query = "SELECT uuid, name, email, password, role FROM usuarios WHERE email = ?"
+            query = "SELECT uuid, name, email, password, role, inquilino_id FROM usuarios WHERE email = ?"
 
             result = self.db.execute_query_fetchone(query, (str(email),))
 
@@ -59,6 +59,7 @@ class UserRepository:
                     "email": result[2],
                     "password": result[3],
                     "role": result[4],
+                    "inquilino_id": result[5]
                 })
 
             return None

@@ -11,6 +11,12 @@ class Settings(BaseSettings):
     # Database Configuration
     database_name: str = Field(..., description="Name of the SQLite Database")
 
+    # Credenciales de admin inicial
+    initial_admin_email: str = Field(..., description="Admin Email")
+    initial_admin_name: str = Field(..., description="Admin Name")
+    initial_admin_password: str = Field(..., description="Admin Password")
+
+
     # JWT Configuracion
     jwt_secret_key: str = Field(..., description="JWT Secret Key")
     jwt_refresh_secret_key: str = Field(..., description="JWT Refresh Secret Key")

@@ -1,27 +1,10 @@
 from src.bootstrap.providers import BASE_DIR
 from src.infrastructure.config.settings import settings
 from src.infrastructure.config.database import Database
+from src.bootstrap.container import container
+from src.application.commands.create_user_admin_command import CreateUserAdminCommand
 
 db = Database()
-
-
-def init_db():
-    try:
-
-        database_path = BASE_DIR / settings.database_name
-        print(database_path)
-
-        created = db.create_database(db_name=database_path)
-
-        if created:
-            print(
-                f"Base de datos SQLite {settings.database_name} Creada exitosamente en {database_path}"
-            )
-
-        create_tables_schema(db_name=database_path)
-
-    except Exception as e:
-        print(f"Error creando la base de datos SQLite: {str(e)}")
 
 
 def create_tables_schema(db_name: str):
@@ -30,7 +13,6 @@ def create_tables_schema(db_name: str):
 
         queries = [
             "PRAGMA foreign_keys = ON;",
-
             """ 
             CREATE TABLE departamentos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,7 +22,6 @@ def create_tables_schema(db_name: str):
                 status TEXT NOT NULL CHECK (status IN ('ocupado','disponible'))
             );
             """,
-
             """
             CREATE TABLE inquilinos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,7 +32,6 @@ def create_tables_schema(db_name: str):
                 FOREIGN KEY (departamento_id) REFERENCES departamentos(id)
             );
             """,
-
             """
             CREATE TABLE cuotas (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -66,7 +46,6 @@ def create_tables_schema(db_name: str):
                 FOREIGN KEY (inquilino_id) REFERENCES inquilinos(id)
             );
             """,
-
             """
             CREATE TABLE pagos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -76,7 +55,6 @@ def create_tables_schema(db_name: str):
                 FOREIGN KEY (cuota_id) REFERENCES cuotas(id)
             );
             """,
-
             """
             CREATE TABLE usuarios (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -88,7 +66,7 @@ def create_tables_schema(db_name: str):
                 role TEXT NOT NULL CHECK (role IN ('admin','cliente')),
                 FOREIGN KEY (inquilino_id) REFERENCES inquilinos(id)
             );
-            """
+            """,
         ]
 
         for query in queries:
@@ -97,6 +75,41 @@ def create_tables_schema(db_name: str):
         print("Schema de tablas creado")
     except Exception as e:
         print(f"Error creando el schema de tablas: {str(e)}")
+
+
+def create_initial_user_admin():
+    try:
+        use_case = container.create_user_use_case()
+
+        command = CreateUserAdminCommand(
+            email=settings.initial_admin_email,
+            name=settings.initial_admin_name,
+            password=settings.initial_admin_password,
+        )
+
+        use_case.create_admin_user(command=command)
+    except Exception as e:
+        raise Exception(f"Error creando administrador inicial {str(e)}")
+
+
+def init_db():
+    try:
+
+        database_path = BASE_DIR / settings.database_name
+        print(database_path)
+
+        created = db.create_database(db_name=str(database_path))
+
+        if created:
+            print(
+                f"Base de datos SQLite {settings.database_name} Creada exitosamente en {database_path}"
+            )
+
+        create_tables_schema(db_name=str(database_path))
+        create_initial_user_admin()
+
+    except Exception as e:
+        print(f"Error creando la base de datos SQLite: {str(e)}")
 
 
 if __name__ == "__main__":

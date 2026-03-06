@@ -61,7 +61,7 @@ class User:
     ) -> None:
 
         if not self._password.verify(old_password_txt, password_hasher):
-            raise ValueError("Invalid current password")
+            raise ValueError("Contraseña actual invalida")
 
         self._password = Password.create_from_text(
             password_txt=new_password_txt, hasher=password_hasher

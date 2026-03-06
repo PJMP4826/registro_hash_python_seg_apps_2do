@@ -22,6 +22,14 @@ from presentation.api.http.controllers.requests.authenticate_user_request import
     AuthenticateUserRequest,
 )
 
+from presentation.api.http.controllers.create_departamento_controller import (
+    CreateDepartamentoController,
+)
+
+from presentation.api.http.controllers.requests.create_departamento_request import (
+    CreateDepartamentoRequest
+)
+
 
 router = APIRouter()
 
@@ -48,4 +56,9 @@ async def change_role(request: ChangeRoleRequest):
 @router.post("/login")
 async def login(request: AuthenticateUserRequest):
     controller = AuthenticateUserController()
+    return await controller.handle(request)
+
+@router.post("/crear-departamento")
+async def create_departamento(request: CreateDepartamentoRequest):
+    controller = CreateDepartamentoController()
     return await controller.handle(request)

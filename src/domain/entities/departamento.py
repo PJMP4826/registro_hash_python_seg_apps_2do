@@ -24,18 +24,34 @@ class Departamento:
     @property
     def status(self) -> DepartamentoStatus:
         return self._status
-    
+
     @property
     def piso(self) -> int:
         return self._piso
-    
+
     @property
     def num_departamento(self) -> int:
         return self._num_departamento
-    
+
     @property
     def monto_renta(self) -> Decimal:
         return self._monto_renta
+
+    @classmethod
+    def create(
+        cls,
+        piso: int,
+        num_departamento: int,
+        monto_renta: Decimal,
+        status: DepartamentoStatus = DepartamentoStatus.DISPONIBLE,
+    ):
+        return cls(
+            id=0,
+            piso=piso,
+            num_departamento=num_departamento,
+            monto_renta=monto_renta,
+            status=status,
+        )
 
     def mark_as_occupied(self) -> None:
         if self._status == DepartamentoStatus.OCUPADO:

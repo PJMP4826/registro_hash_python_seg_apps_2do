@@ -30,7 +30,7 @@ class AuthenticateUser:
 
             user = self._repo.get_user_by_email(email=email.value)
 
-            if not user.verify_password(
+            if not user.verify_password( # type: ignore
                 password_txt=dto.password_txt, password_hasher=self._hasher
             ):
                 raise ValueError("Contraseña actual inválida")

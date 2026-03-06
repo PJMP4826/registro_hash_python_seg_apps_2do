@@ -1,8 +1,6 @@
 from fastapi import APIRouter
-from presentation.api.http.controllers.requests.create_user_request import (
-    CreateUserRequest,
-)
-from presentation.api.http.controllers.create_user_controller import (
+from presentation.api.http.controllers.requests.create_user_with_inquilino_request import CreateInquilinoWithUserRequest
+from presentation.api.http.controllers.create_inquilino_user_controller import (
     CreateUserController,
 )
 from presentation.api.http.controllers.requests.change_password_request import (
@@ -28,8 +26,8 @@ from presentation.api.http.controllers.requests.authenticate_user_request import
 router = APIRouter()
 
 
-@router.post("/registro")
-async def register_user(request: CreateUserRequest):
+@router.post("/registro-clientes")
+async def register_user(request: CreateInquilinoWithUserRequest):
     controller = CreateUserController()
     return await controller.handle(request)
 

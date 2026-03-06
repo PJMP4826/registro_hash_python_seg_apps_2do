@@ -30,6 +30,14 @@ from presentation.api.http.controllers.requests.create_departamento_request impo
     CreateDepartamentoRequest
 )
 
+from presentation.api.http.controllers.generate_cuota_for_inquilino_controller import (
+    GenerateCuotaForInquilinoController
+)
+
+from presentation.api.http.controllers.requests.generate_cuota_for_inquilino_request import (
+    GenerateCuotaForInquilinoRequest
+)
+
 
 router = APIRouter()
 
@@ -61,4 +69,9 @@ async def login(request: AuthenticateUserRequest):
 @router.post("/crear-departamento")
 async def create_departamento(request: CreateDepartamentoRequest):
     controller = CreateDepartamentoController()
+    return await controller.handle(request)
+
+@router.post("/generate-couta")
+async def generate_cuota(request: GenerateCuotaForInquilinoRequest):
+    controller = GenerateCuotaForInquilinoController()
     return await controller.handle(request)

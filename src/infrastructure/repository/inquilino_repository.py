@@ -45,6 +45,25 @@ class InquilinoRepository:
             estatus=bool(row[4]),
         )
 
+    def get_by_email(self, email: str) -> Optional[Inquilino]:
+        query = """
+            SELECT i.id, nombre_completo, telefono, departamento_id, estatus
+            FROM inquilinos as i
+            INNER JOIN usuarios as u ON i.id = u.inquilino_id
+            WHERE u.email = ?
+        """
+        row = self._db.execute_query_fetchone(query, (email,))
+        if not row:
+            return None
+
+        return Inquilino(
+            id=row[0],
+            nombre_completo=row[1],
+            telefono=row[2],
+            departamento_id=row[3],
+            estatus=bool(row[4]),
+        )
+
     def get_by_departamento_id(self, departamento_id: int) -> Optional[Inquilino]:
         query = """
             SELECT id, nombre_completo, telefono, departamento_id, estatus

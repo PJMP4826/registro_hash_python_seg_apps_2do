@@ -4,6 +4,7 @@ from src.infrastructure.config.settings import settings
 from src.infrastructure.repository.user_repository import UserRepository
 from src.infrastructure.repository.departamento_repository import DepartamentoRepository
 from src.infrastructure.repository.inquilino_repository import InquilinoRepository
+from src.infrastructure.repository.cuota_repository import CuotaRepository
 from src.infrastructure.security.bcrypt_password_hasher import BcryptPasswordHasher
 from src.infrastructure.security.jwt_service import JWTService
 
@@ -33,3 +34,6 @@ def get_departamento_repository(db: Database):
 
 def get_inquilino_repository(db: Database):
     return InquilinoRepository(db=db)
+
+def get_cuota_repository(db: Database):
+    return CuotaRepository(db=db)

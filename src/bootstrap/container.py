@@ -6,6 +6,7 @@ from .providers import (
     get_jwt_token_service,
     get_departamento_repository,
     get_inquilino_repository,
+    get_cuota_repository,
     settings
 )
 from src.application.use_cases.change_password import ChangePassword
@@ -16,6 +17,7 @@ from presentation.middleware.auth_middleware import JWTMiddleware
 from src.application.use_cases.crear_inquilino_and_assign_departamento import CreateInquilinoAndAssignDepartamento
 from src.application.use_cases.create_inquilino_with_user import CreateInquilinoWithUser
 from src.application.use_cases.create_departamento import CreateDepartamento
+from src.application.use_cases.generate_cuota_for_inquilino import GenerateCuotaForInquilino
 
 
 class Container:
@@ -24,6 +26,7 @@ class Container:
         self.user_repo = get_user_repository(self.db)
         self.departamento_repository = get_departamento_repository(self.db)
         self.inquilino_repository = get_inquilino_repository(self.db)
+        self.cuota_repository = get_cuota_repository(db=self.db)
         self.hasher = get_password_hasher()
         self.jwt_service = get_jwt_token_service()
 
@@ -73,7 +76,13 @@ class Container:
     def create_departamento_use_case(self) -> CreateDepartamento:
         return CreateDepartamento(departamento_repository=self.departamento_repository)
 
-    
+    def generate_couta_for_inquilino_use_case(self) -> GenerateCuotaForInquilino:
+        return GenerateCuotaForInquilino(
+            cuota_repo=self.cuota_repository,
+            departamento_repo=self.departamento_repository,
+            inquilino_repo=self.inquilino_repository
+        )
+
     def get_json_middleware(self) -> JWTMiddleware:
         return JWTMiddleware(validate_token_use_case=self.validate_token_use_case())
     

@@ -6,7 +6,6 @@ from src.bootstrap.container import Container
 
 
 
-# lifespan a la instancia de FastAPI
 app = FastAPI(
     title="API de Usuarios",
     description="API construida con Arquitectura Limpia",
@@ -19,8 +18,16 @@ container = Container()
 auth_middleware = container.get_json_middleware()
 
 app.include_router(general_routes.router, prefix="/api/v1", tags=["Usuarios"])
-app.include_router(client_routes.router, prefix="/api/v1", tags=["Clientes"], dependencies=[Depends(auth_middleware.require_role("cliente"))])
-app.include_router(admin_routes.router, prefix="/api/v1", tags=["Admin"], dependencies=[Depends(auth_middleware.require_role("admin"))])
+app.include_router(
+    client_routes.router, 
+    prefix="/api/v1", tags=["Clientes"], 
+    dependencies=[Depends(auth_middleware.require_role("cliente"))]
+    )
+app.include_router(
+    admin_routes.router, 
+    prefix="/api/v1", tags=["Admin"], 
+    dependencies=[Depends(auth_middleware.require_role("admin"))]
+)
 
 @app.get("/")
 def read_root():

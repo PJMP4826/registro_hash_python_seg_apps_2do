@@ -7,6 +7,7 @@ from src.application.commands.create_user_with_inquilino_command import (
 from src.application.use_cases.crear_inquilino_and_assign_departamento import (
     CreateInquilinoAndAssignDepartamento,
 )
+from src.infrastructure.config.logger import logger
 
 
 class CreateInquilinoWithUser:
@@ -42,7 +43,7 @@ class CreateInquilinoWithUser:
             dto=user_dto, inquilino_id=inquilino_id
         )
 
-        print(
+        logger.debug(
             f"Usuario {user_dto.name} vinculado con inquilino {inquilino_command.nombre_completo}"
         )
         

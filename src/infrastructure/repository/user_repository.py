@@ -1,7 +1,8 @@
-from src.domain.exceptions.user_exceptions import UserAlreadyExistsError
-from src.domain.value_objects.email import Email
-from src.infrastructure.config.database import Database
 from src.domain.entities.user import User
+from src.domain.value_objects.email import Email
+from src.infrastructure.config.logger import logger
+from src.infrastructure.config.database import Database
+from src.domain.exceptions.user_exceptions import UserAlreadyExistsError
 
 
 class UserRepository:
@@ -17,6 +18,7 @@ class UserRepository:
     def create_user(self, user: User) -> bool:
         if self.email_exists(user.email.value):
             # pasar el mensaje a la nueva excepción
+            logger.warning(f"El email {user.email.value} ya esta registrado")
             raise UserAlreadyExistsError(
                 f"El email {user.email.value} ya esta registrado"
             )
@@ -41,10 +43,12 @@ class UserRepository:
 
             return True
         except Exception as e:
-            raise Exception(f"Error al crear el usuario: {str(e)}")
+            logger.error(f"Error al crear el usuario: {str(e)}")
+            raise Exception(f"Error al crear el usuario")
 
     def get_user_by_email(self, email: str) -> User | None:
         if not self.email_exists(email=email):
+            logger.warning(f"El email {email} no se encuentra registrado")
             raise ValueError(f"El email {email} no se encuentra registrado")
 
         try:
@@ -64,11 +68,13 @@ class UserRepository:
 
             return None
         except Exception as e:
-            raise Exception(f"Error al consultar los datos del usuario: {str(e)}")
+            logger.error(f"Error al consultar los datos del usuario: {str(e)}")
+            raise Exception(f"Error al consultar los datos del usuario")
 
     def get_password_hash_by_email(self, email: str):
         try:
             if not self.email_exists(email=email):
+                logger.warning(f"El email {email} no se encuentra registrado")
                 raise ValueError(f"El email {email} no se encuentra registrado")
 
             query = "SELECT password FROM usuarios WHERE email = ?"
@@ -82,8 +88,8 @@ class UserRepository:
         except ValueError as ve:
             raise ve
         except Exception as e:
-
-            raise Exception(f"Error al obtener el hash de la contraseña: {str(e)}")
+            logger.error(f"Error al obtener el hash de la contraseña: {str(e)}")
+            raise Exception(f"Error al obtener el hash de la contraseña")
 
     def update_password(self, password_hash: str, email: Email) -> bool:
         try:
@@ -95,11 +101,13 @@ class UserRepository:
 
             return True
         except Exception as e:
-            raise Exception(f"Error al actualizar la contraseña: {str(e)}")
+            logger.error(f"Error al actualizar la contraseña: {str(e)}")
+            raise Exception(f"Error al actualizar la contraseña")
 
     def update_rol(self, rol_type: str, email: str) -> bool:
         try:
             if not self.email_exists(email=email):
+                logger.warning(f"El email {email} no se encuentra registrado")
                 raise ValueError(f"El email {email} no se encuentra registrado")
 
             query = """
@@ -113,4 +121,5 @@ class UserRepository:
             raise ve
 
         except Exception as e:
-            raise Exception(f"Error al actualizar el rol: {str(e)}")
+            logger.error(f"Error al actualizar el rol: {str(e)}")
+            raise Exception("Error al actualizar el rol")

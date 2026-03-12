@@ -1,3 +1,4 @@
+from src.infrastructure.config.logger import logger
 from src.bootstrap.providers import BASE_DIR
 from src.infrastructure.config.settings import settings
 from src.infrastructure.config.database import Database
@@ -72,9 +73,9 @@ def create_tables_schema(db_name: str):
         for query in queries:
             db.execute(query=query)
 
-        print("Schema de tablas creado")
+        logger.info("Schema de tablas creado")
     except Exception as e:
-        print(f"Error creando el schema de tablas: {str(e)}")
+        logger.error(f"Error creando el schema de tablas: {str(e)}")
 
 
 def create_initial_user_admin():
@@ -89,6 +90,7 @@ def create_initial_user_admin():
 
         use_case.create_admin_user(command=command)
     except Exception as e:
+        logger.critical(f"Error creando administrador inicial {str(e)}")
         raise Exception(f"Error creando administrador inicial {str(e)}")
 
 
@@ -101,7 +103,7 @@ def init_db():
         created = db.create_database(db_name=str(database_path))
 
         if created:
-            print(
+            logger.info(
                 f"Base de datos SQLite {settings.database_name} Creada exitosamente en {database_path}"
             )
 
@@ -109,7 +111,7 @@ def init_db():
         create_initial_user_admin()
 
     except Exception as e:
-        print(f"Error creando la base de datos SQLite: {str(e)}")
+        logger.critical(f"Error creando la base de datos SQLite: {str(e)}")
 
 
 if __name__ == "__main__":

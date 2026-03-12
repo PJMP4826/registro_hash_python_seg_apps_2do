@@ -1,7 +1,7 @@
 from calendar import monthrange
 from datetime import datetime
 from decimal import Decimal
-
+from src.infrastructure.config.logger import logger
 from src.application.commands.generate_cuota_for_command import (
     GenerateCuotaForInquilinoCommand,
 )
@@ -28,14 +28,17 @@ class GenerateCuotaForInquilino:
         # validar inquilino existe y esta activo
         inquilino = self._inquilino_repo.get_by_email(command.email)
         if not inquilino:
+            logger.warning(f"No existe el inquilino con email {command.email}")
             raise ValueError(f"No existe el inquilino con email {command.email}")
 
         if not inquilino.is_active():
+            logger.warning("No se puede generar cuota para un inquilino inactivo")
             raise ValueError("No se puede generar cuota para un inquilino inactivo")
 
         # obtener departamento para el monto de la renta
         departamento = self._departamento_repo.get_by_id(inquilino.departamento_id)
         if not departamento:
+            logger.warning("El inquilino no tiene un departamento asociado válido")
             raise ValueError("El inquilino no tiene un departamento asociado válido")
 
         # evitar cuota duplicada para el mismo mes/año
@@ -43,6 +46,7 @@ class GenerateCuotaForInquilino:
         print("cuotas_existentes: ", [cuota.fecha for cuota in cuotas_existentes])
         for c in cuotas_existentes:
             if c.fecha.year == command.year and c.fecha.month == command.month:
+                logger.warning(f"Ya existe una cuota para el inquilino para el {c.fecha.day}/{c.fecha.month}/{c.fecha.year}")
                 raise ValueError(
                     f"Ya existe una cuota para el inquilino para el {c.fecha.day}/{c.fecha.month}/{c.fecha.year}"
                 )

@@ -1,6 +1,7 @@
 import jwt
 from datetime import datetime, timezone
 from src.domain.entities.token import TokenPayload
+from src.infrastructure.config.logger import logger
 from src.infrastructure.config.settings import Settings
 from src.domain.value_objects.auth_token import AuthToken
 from src.domain.ports.jwt_service_port import TokenServicePort
@@ -47,7 +48,8 @@ class JWTService(TokenServicePort):
         except jwt.ExpiredSignatureError:
             raise Exception("Token expirado")
         except jwt.InvalidTokenError as e:
-            raise Exception(f"Token invalido: {str(e)}")
+            logger.error(f"Token invalido: {str(e)}")
+            raise Exception("Token invalido")
 
         except Exception as e:
             raise e

@@ -1,3 +1,4 @@
+from src.infrastructure.config.logger import logger
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from src.domain.entities.user import User
@@ -22,6 +23,7 @@ class JWTMiddleware:
         ) -> dict[str, str]:
             user = self._authenticate(credentials.credentials)
             if user["role"] != role:
+                logger.warning(f"Se requiere el rol: {role}")    
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail=f"Se requiere el rol: {role}",
@@ -39,6 +41,7 @@ class JWTMiddleware:
                 "role": payload.get_claim("role")
             }
         except Exception as e:
+            logger.warning("Intento de autenticacion fallido")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=str(e),

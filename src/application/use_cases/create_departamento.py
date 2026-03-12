@@ -40,4 +40,4 @@ class CreateDepartamento:
             raise ve
         except Exception as e:
             logger.error(f"Error creando el departamento: {str(e)}")
-            raise Exception(f"Error creando el departamento: {str(e)}")
+            raise Exception(f"Error creando el departamento")

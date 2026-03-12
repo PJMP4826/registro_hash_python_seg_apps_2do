@@ -36,7 +36,7 @@ class ChangeUserRol:
         except Exception as e:
             logger.error(f"Error al cambiar el rol del usuario con email {dto.email}: {str(e)}")
             raise Exception(
-                f"Error al cambiar el rol del usuario con email {dto.email}: {str(e)}"
+                f"Error al cambiar el rol del usuario con email {dto.email}"
             )
 
     def _validate_user_rol_type(self, role_type: str) -> str:

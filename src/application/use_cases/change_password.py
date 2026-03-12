@@ -37,5 +37,5 @@ class ChangePassword:
             # dto.email en caso de que la variable email no se haya instanciado
             logger.error(f"Error al cambiar la contraseña del usuario con email {dto.email}: {str(e)}")
             raise Exception(
-                f"Error al cambiar la contraseña del usuario con email {dto.email}: {str(e)}"
+                f"Error al cambiar la contraseña del usuario con email {dto.email}"
             )

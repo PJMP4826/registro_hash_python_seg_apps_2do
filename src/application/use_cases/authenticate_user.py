@@ -44,7 +44,7 @@ class AuthenticateUser:
         except Exception as e:
             logger.error(f"Error al autenticar usuario con email {dto.email}: {str(e)}")
             raise Exception(
-                f"Error al autenticar usuario con email {dto.email}: {str(e)}"
+                f"Error al autenticar usuario con email {dto.email}"
             )
 
     def _generate_jwt_token(self, user: User) -> AuthToken:

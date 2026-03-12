@@ -1,6 +1,7 @@
 import sqlite3
 from sqlite3 import Connection, Cursor
 from typing import Optional, Any, Sequence
+from src.infrastructure.config.logger import logger
 
 
 class Database:
@@ -19,7 +20,7 @@ class Database:
             sqlite_connection = sqlite3.connect(db_name)
             return True
         except sqlite3.Error as error:
-            print("Error occurred:", error)
+            logger.error("Error occurred:", error)
             return False
         finally:
             if sqlite_connection:
@@ -29,7 +30,8 @@ class Database:
         try:
             self._connection = sqlite3.connect(db_name)
         except Exception as e:
-            raise Exception(f"Error connecting to db: {db_name}, Error: {str(e)}")
+            logger.error(f"Error connecting to db: {db_name}: {str(e)}")
+            raise Exception(f"Error connecting to db: {db_name}")
 
     def close(self) -> None:
         try:
@@ -37,7 +39,8 @@ class Database:
                 self._connection.close()
                 self._connection = None
         except Exception as e:
-            raise Exception(f"Error closing connection: {str(e)}")
+            logger.error(f"Error closing connection: {str(e)}")
+            raise Exception(f"Error closing connection")
 
     def has_tables(self) -> bool:
         tables = self.execute_query_fetchall(
@@ -47,6 +50,7 @@ class Database:
 
     def execute(self, query: str, params: Optional[Sequence[Any]] = None) -> Cursor:
         if not self._connection:
+            logger.critical("Database not connected")
             raise RuntimeError("Database not connected")
 
         try:
@@ -55,12 +59,14 @@ class Database:
             self._connection.commit()
             return cursor
         except Exception as e:
-            raise Exception(f"Error executing query: {query}, Error: {str(e)}")
+            logger.error(f"Error executing query: {query}: {str(e)}")
+            raise Exception(f"Error executing query: {query}")
 
     def execute_query_fetchall(
         self, query: str, params: Optional[Sequence[Any]] = None
     ) -> list[tuple[Any, ...]]:
         if not self._connection:
+            logger.critical("Database not connected")
             raise RuntimeError("Database not connected")
 
         try:
@@ -68,12 +74,14 @@ class Database:
             cursor.execute(query, params or ())
             return cursor.fetchall()
         except Exception as e:
-            raise Exception(f"Error executing query: {query}, Error: {str(e)}")
+            logger.error(f"Error executing query: {query}: {str(e)}")
+            raise Exception(f"Error executing query: {query}")
 
     def execute_query_fetchmany(
         self, query: str, params: Optional[Sequence[Any]] = None
     ) -> list[tuple[Any, ...]]:
         if not self._connection:
+            logger.critical("Database not connected")
             raise RuntimeError("Database not connected")
 
         try:
@@ -81,12 +89,14 @@ class Database:
             cursor.execute(query, params or ())
             return cursor.fetchmany()
         except Exception as e:
-            raise Exception(f"Error executing query: {query}, Error: {str(e)}")
+            logger.error(f"Error executing query: {query}: {str(e)}")
+            raise Exception(f"Error executing query: {query}")
 
     def execute_query_fetchone(
         self, query: str, params: Optional[Sequence[Any]] = None
     ) -> Optional[tuple[Any, ...]]:
         if not self._connection:
+            logger.critical("Database not connected")
             raise RuntimeError("Database not connected")
 
         try:
@@ -94,4 +104,5 @@ class Database:
             cursor.execute(query, params or ())
             return cursor.fetchone()
         except Exception as e:
-            raise Exception(f"Error executing query: {query}, Error: {str(e)}")
+            logger.error(f"Error executing query: {query}: {str(e)}")
+            raise Exception(f"Error executing query: {query}")

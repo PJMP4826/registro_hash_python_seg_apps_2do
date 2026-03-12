@@ -1,10 +1,11 @@
-from src.infrastructure.repository.user_repository import UserRepository
-from src.application.dto.create_user_dto import CreateUserDTO
-from src.application.commands.create_user_admin_command import CreateUserAdminCommand
-from src.domain.service.password_hasher import PasswordHasher
 from src.domain.entities.user import User
-from src.domain.value_objects.email import Email
 from src.domain.enums.user_role import UserRole
+from src.domain.value_objects.email import Email
+from src.infrastructure.config.logger import logger
+from src.domain.service.password_hasher import PasswordHasher
+from src.application.dto.create_user_dto import CreateUserDTO
+from src.infrastructure.repository.user_repository import UserRepository
+from src.application.commands.create_user_admin_command import CreateUserAdminCommand
 
 
 class CreateUser:
@@ -30,6 +31,7 @@ class CreateUser:
             user_role = UserRole(dto.rol)
         except ValueError:
             valid_roles = ", ".join([role.value for role in UserRole])
+            logger.warning(f"El rol {dto.rol} no es válido. Roles permitidos: {str(valid_roles)}")
             raise ValueError(f"El rol {dto.rol} no es válido. Roles permitidos: {str(valid_roles)}")
 
         email = Email(dto.email)

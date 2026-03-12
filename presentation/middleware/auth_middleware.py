@@ -1,8 +1,7 @@
-from src.infrastructure.config.logger import logger
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from src.domain.entities.user import User
-from src.domain.ports.jwt_service_port import TokenServicePort
+from fastapi import Depends, HTTPException, status
+from src.infrastructure.config.logger import logger
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from src.application.use_cases.validate_token import ValidateTokenUseCase
 
 
@@ -41,9 +40,8 @@ class JWTMiddleware:
                 "role": payload.get_claim("role")
             }
         except Exception as e:
-            logger.warning("Intento de autenticacion fallido")
+            logger.warning(f"Intento de autenticacion fallido: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=str(e),
                 headers={"WWW-Authenticate": "Bearer"},
             )

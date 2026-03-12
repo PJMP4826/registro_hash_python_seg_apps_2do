@@ -1,6 +1,7 @@
+from src.domain.entities.user import User
 from datetime import datetime, timedelta
 from src.domain.value_objects.email import Email
-from src.domain.entities.user import User
+from src.infrastructure.config.logger import logger
 from src.infrastructure.repository.user_repository import UserRepository
 from src.application.dto.authenticate_user_dto import AuthenticateUserDTO
 from src.domain.service.password_hasher import PasswordHasher
@@ -33,6 +34,7 @@ class AuthenticateUser:
             if not user.verify_password( # type: ignore
                 password_txt=dto.password_txt, password_hasher=self._hasher
             ):
+                logger.warning(f"Contraseña actual inválida")
                 raise ValueError("Contraseña actual inválida")
 
             return self._generate_jwt_token(user=user)
@@ -40,6 +42,7 @@ class AuthenticateUser:
         except ValueError as ve:
             raise ve
         except Exception as e:
+            logger.error(f"Error al autenticar usuario con email {dto.email}: {str(e)}")
             raise Exception(
                 f"Error al autenticar usuario con email {dto.email}: {str(e)}"
             )

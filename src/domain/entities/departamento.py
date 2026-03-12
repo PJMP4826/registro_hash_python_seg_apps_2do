@@ -1,5 +1,6 @@
-from ..enums.departamento_status import DepartamentoStatus
 from decimal import Decimal
+from src.infrastructure.config.logger import logger
+from ..enums.departamento_status import DepartamentoStatus
 
 
 class Departamento:
@@ -55,6 +56,7 @@ class Departamento:
 
     def mark_as_occupied(self) -> None:
         if self._status == DepartamentoStatus.OCUPADO:
+            logger.warning("El departamento numero ya esta ocupado")
             raise ValueError("Department already occupied")
 
         self._status = DepartamentoStatus.OCUPADO

@@ -1,4 +1,5 @@
 from decimal import Decimal
+from src.infrastructure.config.logger import logger
 from src.domain.entities.departamento import Departamento
 from src.domain.enums.departamento_status import DepartamentoStatus
 from src.application.commands.create_departamento_command import (
@@ -16,6 +17,7 @@ class CreateDepartamento:
             departamento_status = DepartamentoStatus(command.status)
         except ValueError as e:
             valid_status = ", ".join([estatus.value for estatus in DepartamentoStatus])
+            logger.warning(f"El estatus {command.status} no es válido. estatus permitidos: {str(valid_status)}")
             raise ValueError(
                 f"El estatus {command.status} no es válido. estatus permitidos: {str(valid_status)}"
             )
@@ -37,4 +39,5 @@ class CreateDepartamento:
         except ValueError as ve:
             raise ve
         except Exception as e:
+            logger.error(f"Error creando el departamento: {str(e)}")
             raise Exception(f"Error creando el departamento: {str(e)}")

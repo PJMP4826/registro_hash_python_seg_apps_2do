@@ -1,8 +1,9 @@
 from decimal import Decimal
 from typing import Optional
+from src.infrastructure.config.logger import logger
+from src.infrastructure.config.database import Database
 from src.domain.entities.departamento import Departamento
 from src.domain.enums.departamento_status import DepartamentoStatus
-from src.infrastructure.config.database import Database
 
 
 class DepartamentoRepository:
@@ -11,6 +12,7 @@ class DepartamentoRepository:
 
     def create(self, departamento: Departamento) -> int | None:
         if self.departamento_exist(departamento.num_departamento):
+            logger.warning(f"El departamento numero {departamento.num_departamento} ya existe")
             raise ValueError(
                 f"El departamento numero {departamento.num_departamento} ya existe"
             )

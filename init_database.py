@@ -98,7 +98,7 @@ def init_db():
     try:
 
         database_path = BASE_DIR / settings.database_name
-        print(database_path)
+        # print(database_path)
 
         created = db.create_database(db_name=str(database_path))
 

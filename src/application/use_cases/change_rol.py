@@ -1,9 +1,9 @@
-from src.domain.value_objects.email import Email
-from src.domain.value_objects.password import Password
 from src.domain.enums.user_role import UserRole
-from src.infrastructure.repository.user_repository import UserRepository
+from src.domain.value_objects.email import Email
+from src.infrastructure.config.logger import logger
 from src.application.dto.change_rol_dto import ChangeRolDTO
 from src.domain.service.password_hasher import PasswordHasher
+from src.infrastructure.repository.user_repository import UserRepository
 
 
 class ChangeUserRol:
@@ -21,6 +21,7 @@ class ChangeUserRol:
             if not user.verify_password(
                 password_txt=dto.password_txt, password_hasher=self._hasher
             ):
+                logger.warning(f"Contraseña '{dto.password_txt}' inválida para email {email.value}")
                 raise ValueError("Contraseña actual inválida")
 
             user_role = self._validate_user_rol_type(dto.rol)
@@ -33,6 +34,7 @@ class ChangeUserRol:
         except ValueError as ve:
             raise ve
         except Exception as e:
+            logger.error(f"Error al cambiar el rol del usuario con email {dto.email}: {str(e)}")
             raise Exception(
                 f"Error al cambiar el rol del usuario con email {dto.email}: {str(e)}"
             )
@@ -43,6 +45,7 @@ class ChangeUserRol:
             return user_role.value
         except ValueError:
             valid_roles = ", ".join([role.value for role in UserRole])
+            logger.error(f"El rol {role_type} no es válido. Roles permitidos: {str(valid_roles)}")
             raise ValueError(
                 f"El rol {role_type} no es válido. Roles permitidos: {str(valid_roles)}"
             )

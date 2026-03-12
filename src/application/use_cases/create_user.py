@@ -31,7 +31,7 @@ class CreateUser:
             user_role = UserRole(dto.rol)
         except ValueError:
             valid_roles = ", ".join([role.value for role in UserRole])
-            logger.warning(f"El rol {dto.rol} no es válido. Roles permitidos: {str(valid_roles)}")
+            logger.debug(f"El rol {dto.rol} no es válido. Roles permitidos: {str(valid_roles)}")
             raise ValueError(f"El rol {dto.rol} no es válido. Roles permitidos: {str(valid_roles)}")
 
         email = Email(dto.email)

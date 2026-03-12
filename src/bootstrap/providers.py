@@ -23,7 +23,9 @@ def get_user_repository(db: Database):
     return UserRepository(db=db)
 
 def get_password_hasher():
-    return BcryptPasswordHasher()
+    return BcryptPasswordHasher(
+        settings=settings
+    )
 
 
 def get_jwt_token_service() -> JWTService:

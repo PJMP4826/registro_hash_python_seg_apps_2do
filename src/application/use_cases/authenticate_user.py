@@ -31,12 +31,17 @@ class AuthenticateUser:
 
             user = self._repo.get_user_by_email(email=email.value)
 
+            if not user:
+                logger.warning(f"Usuario con email {email.value} no encontrado")
+                raise ValueError("Usuario no encontrado")
+
             if not user.verify_password( # type: ignore
                 password_txt=dto.password_txt, password_hasher=self._hasher
             ):
                 logger.warning(f"Contraseña actual inválida")
                 raise ValueError("Contraseña actual inválida")
 
+            logger.info(f"Usuario {user.name} con email {email.value} autenticado exitosamente")
             return self._generate_jwt_token(user=user)
 
         except ValueError as ve:

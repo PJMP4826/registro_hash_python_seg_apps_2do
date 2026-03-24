@@ -1,3 +1,4 @@
+import re
 from src.domain.entities.user import User
 from datetime import datetime, timedelta
 from src.domain.value_objects.email import Email
@@ -24,6 +25,8 @@ class AuthenticateUser:
         self._token_service = token_service
         self._settings = settings
 
+    _EMAIL_BASIC_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
     def execute(self, dto: AuthenticateUserDTO) -> AuthToken:
         try:
             # Validar el formato del email desde el dominio
@@ -32,7 +35,7 @@ class AuthenticateUser:
             user = self._repo.get_user_by_email(email=email.value)
 
             if not user:
-                logger.warning(f"Usuario con email {email.value} no encontrado")
+                logger.warning(f"Usuario con email {self.mask_email(email.value)} no encontrado")
                 raise ValueError("Usuario no encontrado")
 
             if not user.verify_password( # type: ignore
@@ -41,13 +44,13 @@ class AuthenticateUser:
                 logger.warning(f"Contraseña actual inválida")
                 raise ValueError("Contraseña actual inválida")
 
-            logger.info(f"Usuario {user.name} con email {email.value} autenticado exitosamente")
+            logger.info(f"Usuario con email {self.mask_email(email.value)} autenticado exitosamente")
             return self._generate_jwt_token(user=user)
 
         except ValueError as ve:
             raise ve
         except Exception as e:
-            logger.error(f"Error al autenticar usuario con email {dto.email}: {str(e)}")
+            logger.error(f"Error al autenticar usuario con email {self.mask_email(dto.email)}: {str(e)}")
             raise Exception(
                 f"Error al autenticar usuario con email {dto.email}"
             )
@@ -67,3 +70,35 @@ class AuthenticateUser:
         token = self._token_service.generate(payload=payload)
 
         return token
+    
+    def mask_email(self, email: str) -> str:
+        """
+        Ejemplos:
+        - admin@system.local -> a***n@s****m.local
+        - edna@gmail.com     -> e**a@g***l.com
+        """
+        if not email:
+            return "***@***"
+
+        value = email.strip().lower()
+
+        # si no parece email, no devolvemos el valor original para evitar fuga de datos.
+        if not self._EMAIL_BASIC_RE.match(value):
+            return "***@***"
+
+        local, domain = value.split("@", 1)
+
+        def mask_segment(text: str, keep_start: int = 1, keep_end: int = 1) -> str:
+            if len(text) <= keep_start + keep_end:
+                return "*" * len(text)
+            middle = "*" * (len(text) - keep_start - keep_end)
+            return f"{text[:keep_start]}{middle}{text[-keep_end:]}"
+
+        # dominio: separa nombre y tld para conservar trazabilidad mínima (ej: .com, .local)
+        if "." in domain:
+            domain_name, tld = domain.rsplit(".", 1)
+            masked_domain = f"{mask_segment(domain_name)}.{tld}"
+        else:
+            masked_domain = mask_segment(domain)
+
+        return f"{mask_segment(local)}@{masked_domain}"

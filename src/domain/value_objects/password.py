@@ -30,25 +30,25 @@ class Password:
     def _validate_strength(password: str) -> None:
         """Valida la fortaleza de la contraseña"""
         if len(password) < 8:
-            logger.debug(f"Se envio una contraseña menor a 8 caracteres: {password}")
+            logger.debug(f"Se envio una contraseña menor a 8 caracteres")
             raise ValueError("La contraseña debe tener al menos 8 caracteres")
 
         if len(password) > 10:
-            logger.debug(f"Se envio una contraseña mayor a 10 caracteres: {password}")
+            logger.debug(f"Se envio una contraseña mayor a 10 caracteres")
             raise ValueError("La contraseña no puede exceder los 10 caracteres")
 
         if not re.search(r'[A-Z]', password):
-            logger.debug(f"Se envio una contraseña sin mayúsculas: {password}")
+            logger.debug(f"Se envio una contraseña sin mayúsculas")
             raise ValueError("La contraseña debe contener al menos una mayúscula")
 
         if not re.search(r'[a-z]', password):
-            logger.debug(f"Se envio una contraseña sin minusculas: {password}")
+            logger.debug(f"Se envio una contraseña sin minusculas")
             raise ValueError("La contraseña debe contener al menos una minúscula")
 
         if not re.search(r'\d', password):
-            logger.debug(f"Se envio una contraseña sin numeros: {password}")
+            logger.debug(f"Se envio una contraseña sin numeros")
             raise ValueError("La contraseña debe contener al menos un número")
 
         if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-            logger.debug(f"Se envio una contraseña sin un carácter especial: {password}")
+            logger.debug(f"Se envio una contraseña sin un carácter especial")
             raise ValueError("La contraseña debe contener al menos un carácter especial")

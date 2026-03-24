@@ -34,6 +34,8 @@ class CreateDepartamento:
 
             if created and created > 0:
                 return True
+            
+            logger.debug(f"Departamento no.{command.num_departamento} creado exitosamente exitosamente")
 
             return False
         except ValueError as ve:

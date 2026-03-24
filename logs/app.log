@@ -1,3 +1,42 @@
-03/23/2026 11:18:45 AM | INFO | authenticate_user.py:44 | execute | Usuario System_Admin con email admin@system.local autenticado exitosamente
-03/23/2026 11:18:45 AM | INFO | authenticate_user_controller.py:24 | handle | Usuario admin@system.local
-03/23/2026 11:20:19 AM | WARNING | departamento_repository.py:15 | create | El departamento numero 2 ya existe
+03/24/2026 02:49:01 PM | ERROR | database.py:107 | execute_query_fetchone | Error executing query: SELECT COUNT(*) as count FROM usuarios WHERE email = ?: no such table: usuarios
+03/24/2026 02:49:01 PM | ERROR | authenticate_user.py:50 | execute | Error al autenticar usuario con email admin@system.local: Error executing query: SELECT COUNT(*) as count FROM usuarios WHERE email = ?
+03/24/2026 02:57:57 PM | INFO | authenticate_user.py:44 | execute | Usuario System_Admin con email admin@system.local autenticado exitosamente
+03/24/2026 02:58:36 PM | WARNING | departamento_repository.py:15 | create | El departamento numero 4 ya existe
+03/24/2026 03:00:02 PM | WARNING | departamento_repository.py:15 | create | El departamento numero 5 ya existe
+03/24/2026 03:01:11 PM | WARNING | create_departamento.py:20 | execute | El estatus vencido no es válido. estatus permitidos: ocupado, disponible
+03/24/2026 03:02:14 PM | WARNING | crear_inquilino_and_assign_departamento.py:26 | execute | El departamento ya esta ocupado
+03/24/2026 03:03:05 PM | WARNING | crear_inquilino_and_assign_departamento.py:26 | execute | El departamento ya esta ocupado
+03/24/2026 03:03:12 PM | INFO | crear_inquilino_and_assign_departamento.py:38 | execute | Inquilino Rogelio Sanchez alojado en el departamento numero 5
+03/24/2026 03:03:12 PM | INFO | crear_inquilino_and_assign_departamento.py:43 | execute | Departamento numero 5 cambio a ocupado
+03/24/2026 03:03:12 PM | DEBUG | create_user.py:34 | create_client_user | El rol usuario no es válido. Roles permitidos: cliente, admin
+03/24/2026 03:03:48 PM | WARNING | crear_inquilino_and_assign_departamento.py:26 | execute | El departamento ya esta ocupado
+03/24/2026 03:06:22 PM | WARNING | create_departamento.py:20 | execute | El estatus vencido no es válido. estatus permitidos: ocupado, disponible
+03/24/2026 03:06:46 PM | WARNING | crear_inquilino_and_assign_departamento.py:26 | execute | El departamento ya esta ocupado
+03/24/2026 03:06:52 PM | INFO | crear_inquilino_and_assign_departamento.py:38 | execute | Inquilino Rogelio Sanchez alojado en el departamento numero 7
+03/24/2026 03:06:52 PM | INFO | crear_inquilino_and_assign_departamento.py:43 | execute | Departamento numero 7 cambio a ocupado
+03/24/2026 03:06:52 PM | DEBUG | password.py:33 | _validate_strength | Se envio una contraseña menor a 8 caracteres
+03/24/2026 03:37:43 PM | INFO | authenticate_user.py:44 | execute | Usuario System_Admin con email admin@system.local autenticado exitosamente
+03/24/2026 03:38:44 PM | DEBUG | email.py:14 | __post_init__ | Se envio un email invalido: edna.gmail.com
+03/24/2026 03:38:50 PM | DEBUG | password.py:33 | _validate_strength | Se envio una contraseña menor a 8 caracteres
+03/24/2026 03:43:28 PM | WARNING | auth_middleware.py:43 | _authenticate | Intento de autenticacion fallido: Token expirado
+03/24/2026 03:43:40 PM | WARNING | generate_cuota_for_inquilino.py:49 | execute | Ya existe una cuota para el inquilino para el 1/3/2025
+03/24/2026 03:44:28 PM | INFO | authenticate_user.py:44 | execute | Usuario edna con email edna@gmail.com autenticado exitosamente
+03/24/2026 03:47:17 PM | ERROR | jwt_service.py:51 | validate | Token invalido: Invalid crypto padding
+03/24/2026 03:47:17 PM | WARNING | auth_middleware.py:43 | _authenticate | Intento de autenticacion fallido: Token invalido
+03/24/2026 03:49:16 PM | INFO | authenticate_user.py:44 | execute | Usuario edna con email edna@gmail.com autenticado exitosamente
+03/24/2026 03:51:23 PM | WARNING | create_departamento.py:20 | execute | El estatus cliente no es válido. estatus permitidos: ocupado, disponible
+03/24/2026 03:52:02 PM | WARNING | departamento_repository.py:15 | create | El departamento numero 8 ya existe
+03/24/2026 03:54:48 PM | INFO | crear_inquilino_and_assign_departamento.py:38 | execute | Inquilino edna alojado en el departamento numero 8
+03/24/2026 03:54:48 PM | INFO | crear_inquilino_and_assign_departamento.py:43 | execute | Departamento numero 8 cambio a ocupado
+03/24/2026 03:54:49 PM | WARNING | user_repository.py:21 | create_user | El email edna@gmail.com ya esta registrado
+03/24/2026 03:55:20 PM | WARNING | crear_inquilino_and_assign_departamento.py:26 | execute | El departamento ya esta ocupado
+03/24/2026 03:55:37 PM | WARNING | crear_inquilino_and_assign_departamento.py:22 | execute | El departamento no existe
+03/24/2026 03:56:27 PM | WARNING | crear_inquilino_and_assign_departamento.py:26 | execute | El departamento ya esta ocupado
+03/24/2026 03:56:44 PM | INFO | crear_inquilino_and_assign_departamento.py:38 | execute | Inquilino jorge alojado en el departamento numero 9
+03/24/2026 03:56:44 PM | INFO | crear_inquilino_and_assign_departamento.py:43 | execute | Departamento numero 9 cambio a ocupado
+03/24/2026 03:56:44 PM | DEBUG | create_inquilino_with_user.py:46 | execute | Usuario jorge vinculado con inquilino jorge
+03/24/2026 04:08:24 PM | INFO | authenticate_user.py:47 | execute | Usuario con email a***n@s****m.local autenticado exitosamente
+03/24/2026 04:09:21 PM | DEBUG | email.py:14 | __post_init__ | Se envio un email invalido: emma.gmail.com
+03/24/2026 04:09:30 PM | DEBUG | password.py:41 | _validate_strength | Se envio una contraseña sin mayúsculas
+03/24/2026 04:09:38 PM | DEBUG | password.py:53 | _validate_strength | Se envio una contraseña sin un carácter especial
+03/24/2026 04:09:45 PM | DEBUG | password.py:49 | _validate_strength | Se envio una contraseña sin numeros

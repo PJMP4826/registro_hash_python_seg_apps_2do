@@ -3,6 +3,7 @@ from presentation.api.http.routes import general_routes
 from presentation.api.http.routes import client_routes 
 from presentation.api.http.routes import admin_routes
 from src.bootstrap.container import Container
+from presentation.middleware.cors_middleware import add_cors_middleware
 
 
 
@@ -11,6 +12,8 @@ app = FastAPI(
     description="API construida con Arquitectura Limpia",
     version="1.0.0"
 )
+
+add_cors_middleware(app=app)
 
 container = Container()
 

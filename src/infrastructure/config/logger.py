@@ -13,7 +13,7 @@ LOG_DIR.mkdir(exist_ok=True)
 # FILE HANDLER
 file_handler = logging.FileHandler(
     filename=LOG_DIR / "app.log",
-    mode="w",
+    mode="a",
     encoding="utf-8"
 )
 
